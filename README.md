@@ -1,0 +1,120 @@
+# ServiceNow IT Service Management Build in a Personal Developer Instance
+
+![ServiceNow](https://img.shields.io/badge/ServiceNow-Personal_Developer_Instance-62D84E?logo=servicenow&logoColor=white&style=flat-square)
+![Framework](https://img.shields.io/badge/Framework-ITIL_4-005571?style=flat-square)
+![Scope](https://img.shields.io/badge/Scope-Incident_·_Request_·_Knowledge_·_RBAC_·_CMDB-2E7D32?style=flat-square)
+![Status](https://img.shields.io/badge/Status-Building-orange?style=flat-square)
+
+A hands-on IT Service Management (ITSM) build in a free ServiceNow Personal Developer Instance (PDI). I work the platform the way a help desk specialist does and document each piece here so the work is reproducible and easy to verify.
+
+I built this to close one real gap. My background is infrastructure, automation, and security, and ServiceNow is the one tool the California state IT roles I am applying to weight heavily that I had not used hands-on yet. So I am using it for real, end to end, and writing down exactly what I did.
+
+The actual work happens in the browser inside the PDI. This repository is the record of that work, with screenshots and step-by-step notes for every piece.
+
+![Overview diagram](images/overview.png)
+
+## What This Builds
+
+A small but complete ITSM slice in one instance, covering the core help desk workflow from a user's request through to a resolved ticket backed by a knowledge base and a configuration record.
+
+- **Incident and request management.** Log, categorize, prioritize, assign, and resolve incidents and requests, and read the queue from a dashboard.
+- **A service catalog item with a Flow Designer workflow.** A request the end user submits from the portal that kicks off an automated approval and fulfillment flow.
+- **Knowledge base articles.** Two or three articles that document a common fix and a standard procedure, the way a real knowledge base reduces repeat tickets.
+- **Role-Based Access Control (RBAC).** Users, groups, and roles set up so the right people see and do the right things, and nobody sees what they should not.
+- **A Configuration Management Database (CMDB) example.** A handful of configuration items (CIs) and relationships, linked to incidents so a ticket shows the asset it affects.
+
+Each area maps to a real duty from the help desk specialist role I am targeting. See [How This Maps to the Role](#how-this-maps-to-the-role) below.
+
+## Platform
+
+| Layer | What I use |
+|---|---|
+| Instance | ServiceNow Personal Developer Instance (free, full platform) |
+| Framework | ITIL 4 service management practices |
+| Incident and request | Incident, Service Catalog, and Request tables with assignment and priority |
+| Automation | Flow Designer for catalog request approval and fulfillment |
+| Knowledge | Knowledge Base with categorized articles |
+| Access | Users, groups, roles, and access control |
+| Configuration | CMDB tables, configuration items, and CI relationships |
+| Reporting | Lists, filters, dashboards, and reports |
+
+## Why It Exists
+
+ServiceNow is the system of record for IT support at most large organizations, including the California state departments I am applying to. The duty statement for the role I am targeting names ServiceNow directly for incident and request handling, the service portal, the knowledge base, and dashboards and reporting.
+
+Reading about it is not the same as using it. This project is me using it. I stand up each capability in a real instance, run a realistic ticket through it, and document the steps and the result. By the end the repository shows the full path a request takes, from a user submitting it to a resolved ticket tied to a knowledge article and a configuration item.
+
+## Current Status
+
+Nothing is built yet. This README is the plan and the outline. I will fill in each section, mark it done, and add screenshots as I complete the work in the instance.
+
+| Component | Status |
+|---|---|
+| Personal Developer Instance provisioned | Not started |
+| Incident management | Not started |
+| Request management | Not started |
+| Service catalog item | Not started |
+| Flow Designer workflow | Not started |
+| Knowledge base articles | Not started |
+| Role-Based Access Control (users, groups, roles) | Not started |
+| CMDB example | Not started |
+| Dashboard and reporting | Not started |
+
+## The Build
+
+Each section below gets filled in as I complete it: what I did, why, the steps to reproduce it, and a screenshot.
+
+### 1. Incident and request management
+
+_To be documented. Goal: log an incident, set category and priority, assign it to a group, work it, and resolve it. Then do the same for a service request, and show both in a queue I can filter and report on._
+
+![Incident list](images/incident-list.png)
+
+### 2. Service catalog item with a Flow Designer workflow
+
+_To be documented. Goal: build a catalog item the user submits from the portal, for example a new laptop or software access request, and wire it to a Flow Designer flow that routes an approval and creates the fulfillment task automatically._
+
+![Catalog item and flow](images/flow-designer.png)
+
+### 3. Knowledge base articles
+
+_To be documented. Goal: write two or three knowledge articles in plain language for a common fix and a standard procedure, categorize them, publish them, and link one to a resolved incident._
+
+![Knowledge article](images/kb-article.png)
+
+### 4. Role-Based Access Control
+
+_To be documented. Goal: create users, put them in groups, assign roles, and show that access follows the role. A fulfiller can work tickets, a requester can only see their own._
+
+![Groups and roles](images/rbac-groups.png)
+
+### 5. CMDB example
+
+_To be documented. Goal: add a small set of configuration items, give them a relationship or two, and attach a CI to an incident so the ticket shows the affected asset._
+
+![CMDB configuration items](images/cmdb-ci.png)
+
+## How This Maps to the Role
+
+This build is scoped against the published duty statement for the Information Technology Specialist I help desk role (RPA 30622, JC-520758, Department of General Services, Enterprise Technology Solutions). The mapping:
+
+| Duty from the statement | Where it shows up here |
+|---|---|
+| Evaluate and assign incidents and requests, document them in ServiceNow Dashboards and Reports | Incident and request management, plus the dashboard |
+| Complete the IT Service Request through the ServiceNow Portal and meet the service level agreement (SLA) | Service catalog item with the Flow Designer workflow |
+| Research and create knowledge articles to document IT processes and common fixes in the ServiceNow knowledge base | Knowledge base articles |
+| Diagnose and resolve complex incidents, perform root cause analysis in ServiceNow | Incident management linked to CMDB configuration items |
+| Handle sensitive information and maintain confidentiality | Role-Based Access Control |
+
+## How to Reproduce
+
+1. Sign up for a free ServiceNow Personal Developer Instance at [developer.servicenow.com](https://developer.servicenow.com).
+2. Follow the numbered sections under [The Build](#the-build) in order. Each one lists the steps I took and what to click.
+3. Compare your result against the screenshots in `images/`.
+
+## References
+
+- [ServiceNow Developer Program](https://developer.servicenow.com)
+- [ServiceNow Product Documentation](https://www.servicenow.com/docs/)
+- [ITIL 4 service management practices](https://www.axelos.com/certifications/itil-service-management)
+- [aws-ha-infra](https://github.com/umraffer32/aws-ha-infra), my AWS high-availability infrastructure project in the same documentation style

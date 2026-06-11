@@ -1,0 +1,29 @@
+# OS cruft
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*~
+
+# Editor and IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Secrets and instance details
+# The ServiceNow build lives in a Personal Developer Instance (PDI).
+# Never commit instance URLs, usernames, passwords, tokens, or update set exports
+# that contain credentials.
+.env
+.env.*
+*.secret
+secrets/
+credentials*
+*-credentials.*
+instance-url.txt
+
+# Local notes not meant for the public repo
+scratch/
+TODO.local.md
