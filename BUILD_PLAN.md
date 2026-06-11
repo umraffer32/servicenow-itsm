@@ -88,7 +88,7 @@ All prose is in my voice. Plain, direct, concrete, first person. No em dashes. N
 
 | Step | Status | Date |
 |---|---|---|
-| 0. Provision instance | Not started | |
+| 0. Provision instance | In progress (waitlisted, free pool full) | Jun 11 |
 | 1. Incident management | Not started | |
 | 2. Request management | Not started | |
 | 3. Catalog item and flow | Not started | |

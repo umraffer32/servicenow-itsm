@@ -108,6 +108,8 @@ This build is scoped against the published duty statement for the Information Te
 
 ## How to Reproduce
 
+The full step-by-step worklog, with screenshots and the parts that did not go smoothly, is in [WALKTHROUGH.md](WALKTHROUGH.md).
+
 1. Sign up for a free ServiceNow Personal Developer Instance at [developer.servicenow.com](https://developer.servicenow.com).
 2. Follow the numbered sections under [The Build](#the-build) in order. Each one lists the steps I took and what to click.
 3. Compare your result against the screenshots in `images/`.
