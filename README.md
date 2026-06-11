@@ -11,6 +11,8 @@ I built this to close one real gap. My background is infrastructure, automation,
 
 The actual work happens in the browser inside the PDI. This repository is the record of that work, with screenshots and step-by-step notes for every piece.
 
+![Overview diagram](images/overview.png)
+
 ## What This Builds
 
 A small but complete ITSM slice in one instance, covering the core help desk workflow from a user's request through to a resolved ticket backed by a knowledge base and a configuration record.
@@ -66,21 +68,31 @@ Each section below gets filled in as I complete it: what I did, why, the steps t
 
 _To be documented. Goal: log an incident, set category and priority, assign it to a group, work it, and resolve it. Then do the same for a service request, and show both in a queue I can filter and report on._
 
+![Incident list](images/incident-list.png)
+
 ### 2. Service catalog item with a Flow Designer workflow
 
 _To be documented. Goal: build a catalog item the user submits from the portal, for example a new laptop or software access request, and wire it to a Flow Designer flow that routes an approval and creates the fulfillment task automatically._
+
+![Catalog item and flow](images/flow-designer.png)
 
 ### 3. Knowledge base articles
 
 _To be documented. Goal: write two or three knowledge articles in plain language for a common fix and a standard procedure, categorize them, publish them, and link one to a resolved incident._
 
+![Knowledge article](images/kb-article.png)
+
 ### 4. Role-Based Access Control
 
 _To be documented. Goal: create users, put them in groups, assign roles, and show that access follows the role. A fulfiller can work tickets, a requester can only see their own._
 
+![Groups and roles](images/rbac-groups.png)
+
 ### 5. CMDB example
 
 _To be documented. Goal: add a small set of configuration items, give them a relationship or two, and attach a CI to an incident so the ticket shows the affected asset._
+
+![CMDB configuration items](images/cmdb-ci.png)
 
 ## How This Maps to the Role
 
@@ -98,7 +110,7 @@ This build is scoped against the published duty statement for the Information Te
 
 1. Sign up for a free ServiceNow Personal Developer Instance at [developer.servicenow.com](https://developer.servicenow.com).
 2. Follow the numbered sections under [The Build](#the-build) in order. Each one lists the steps I took and what to click.
-3. Compare your result against the screenshot in each section.
+3. Compare your result against the screenshots in `images/`.
 
 ## References
 
