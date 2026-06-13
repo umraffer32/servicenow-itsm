@@ -66,7 +66,11 @@ _Pending the instance. Goal: build a catalog item the user submits from the port
 
 ## Step 4. Knowledge base articles
 
-_Pending the instance. Goal: write two or three knowledge articles for a common fix and a standard procedure, categorize and publish them, and link one to a resolved incident._
+_Pending the instance to publish. Goal: write two or three knowledge articles for a common fix and a standard procedure, categorize and publish them, and link one to a resolved incident._
+
+Drafted and ready to paste into the knowledge base:
+
+1. [Linux client cannot reach hosts behind a Tailscale subnet router](knowledge-base/kb01-linux-tailscale-subnet-routes.md) (troubleshooting, common fix)
 
 ## Step 5. Role-Based Access Control
 
