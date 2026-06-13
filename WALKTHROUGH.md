@@ -71,6 +71,7 @@ _Pending the instance to publish. Goal: write two or three knowledge articles fo
 Drafted and ready to paste into the knowledge base:
 
 1. [Linux client cannot reach hosts behind a Tailscale subnet router](knowledge-base/kb01-linux-tailscale-subnet-routes.md) (troubleshooting, common fix)
+2. [Configure SSH for key-based authentication and disable password login](knowledge-base/kb02-ssh-key-based-authentication.md) (how-to, hardening procedure)
 
 ## Step 5. Role-Based Access Control
 
