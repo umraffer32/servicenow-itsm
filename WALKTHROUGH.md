@@ -1,6 +1,6 @@
 # Build Walkthrough
 
-_Last updated: June 11, 2026_
+_Last updated: July 9, 2026_
 
 This is the actual worklog. The [README](README.md) says what the project is and the [build plan](BUILD_PLAN.md) lays out the steps. This file is where I record what I actually did, in order, with screenshots, so the whole thing is reproducible from scratch.
 
@@ -52,9 +52,71 @@ I joined the waitlist. ServiceNow emails you when an instance is allocated. Noth
 
 **Status: waiting on instance allocation as of June 11, 2026.** Everything below is staged and ready to build the moment the instance is live.
 
+**Update, July 9, 2026: the instance came off the waitlist.** Logged in as admin on the Australia release with no issues. Picking the build back up at Step 1.
+
 ## Step 1. Incident management
 
-_Pending the instance. Goal: log an incident with a caller, category, and priority from impact and urgency, work it through its states with work notes, resolve it, and build a filtered list view of active incidents._
+Goal: log an incident with a caller, category, and priority from impact and urgency, work it through its states with work notes, resolve it, and build a filtered list view of active incidents.
+
+### Finding the incident form
+
+I typed "Incident" into the All menu and landed on an Incident list filtered to Self Service, with one row already in it: INC0008111, "ATF: Test1". That's ServiceNow's own out-of-box demo data, not mine.
+
+![Incident list, Self Service view](images/incident-list-self-service-view.png)
+
+Clicking New from here gave me a stripped-down form: Number, Caller, Watch list, Urgency, State, Short description, Additional comments. Nothing for Category, Impact, Priority, or Assignment group.
+
+![New incident, Self Service form](images/incident-new-self-service-form.png)
+
+That's the Self Service view, the simplified layout meant for an end user submitting their own ticket from the portal. It's not what an agent works from. I right-clicked the list header and found a View submenu with the actual list of views the instance has configured: Default view, Indicators Panel, Major incidents, Mobile, Portal, Self Service (the one I was on), Service Operations Workspace, and a few report-specific views.
+
+![Switching the list view](images/incident-list-view-switch-menu.png)
+
+Switching to Default view reloaded the list with the columns an agent actually needs: Priority, State, Category, Assignment group, Assigned to.
+
+![Incident list, Default view](images/incident-list-default-view.png)
+
+### Logging the incident
+
+From Default view, New opens the full form: Caller, Category, Subcategory, Service, Assignment group, Impact, Urgency, Priority, State, plus Notes and Resolution Information tabs further down.
+
+![Blank full incident form](images/incident-new-full-form-blank.png)
+
+I logged this one against a real problem I'd already written up as a knowledge base article, so the incident and the KB article tie together later in Step 4. Caller stayed System Administrator. Category: Network. Short description: "Linux workstation cannot reach internal hosts behind Tailscale subnet router."
+
+![Category and short description set](images/incident-category-short-description.png)
+
+For Impact and Urgency, only one workstation was affected, not a site or a team, so Impact went to 3 - Low. It was blocking the user's work but nothing was down, so Urgency went to 2 - Medium. Priority is a read-only field ServiceNow derives from the Impact x Urgency matrix, and it calculated to 4 - Low.
+
+![Impact, Urgency, and calculated Priority](images/incident-impact-urgency-priority.png)
+
+Assignment group went to Network, the group that would actually own a routing problem like this.
+
+![Assignment group set to Network](images/incident-assignment-group.png)
+
+I added a description with the actual symptom before submitting: the user could reach the office LAN over Tailscale but not hosts on the remote subnet routed through it, and direct tailnet peers responded fine while only the subnet-routed hosts failed.
+
+![Description added, ready to submit](images/incident-description-ready-to-submit.png)
+
+Submitting created INC0010003 with State New, Priority 4 - Low, Category Network, and Assignment group Network, sitting in the list next to the untouched demo record.
+
+![INC0010003 submitted](images/incident-submitted-list.png)
+
+### Working the incident through its states
+
+The Assigned to field only accepts users with an agent role. Typing "System Administrator" came back invalid, since that account doesn't carry one by default in a fresh Personal Developer Instance. The picker on that field only offered five names: Bow Ruggeri, David Dan, David Loo, Fred Luddy, and ITIL User, all out-of-box demo agents that ship with the instance. I assigned it to ITIL User, the clearest of the five for a portfolio piece since it reads as an obvious demo account rather than a real name. Once RBAC is built in Step 5 with actual named users, I can come back and reassign this ticket to one of those instead.
+
+With Assigned to set, I moved State to In Progress and logged a work note with the real diagnosis:
+
+> tailscale status showed the client connected to the tailnet, but pings to the advertised subnet timed out. Confirmed with the user that this is a Linux client, not Windows. Cause: Tailscale does not accept advertised subnet routes on Linux by default (Windows/macOS/iOS/Android do). Ran `sudo tailscale set --accept-routes` on the client. Verified with `ip route` that the subnet now routes through tailscale0. User confirmed the remote hosts are reachable.
+
+![Incident In Progress with work notes](images/incident-in-progress-work-notes.png)
+
+The list view now shows INC0010003 as In Progress, Priority 4 - Low, assigned to the Network group and ITIL User.
+
+![Incident list showing In Progress state](images/incident-list-in-progress.png)
+
+_Next: resolving the incident with resolution notes, then a filtered list view of active incidents._
 
 ## Step 2. Request management
 

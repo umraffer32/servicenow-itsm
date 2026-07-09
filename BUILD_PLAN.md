@@ -1,6 +1,6 @@
 # ServiceNow Build Plan
 
-_Last updated: June 11, 2026_
+_Last updated: July 9, 2026_
 
 The working plan for this project. The README is the public-facing record. This file is how I run the build and track where I am.
 
@@ -80,16 +80,12 @@ For every step:
 3. Fill in the matching README section: what I did, why, the steps to reproduce, and the screenshot.
 4. Update the Current Status table in the README from Not started to Done.
 
-## Writing rules
-
-All prose is in my voice. Plain, direct, concrete, first person. No em dashes. No mid-sentence colons. Acronyms spelled out on first use. Same tone as the aws-ha-infra README. No invented results. If a step did not work or is a work in progress, I say so.
-
 ## Progress
 
 | Step | Status | Date |
 |---|---|---|
-| 0. Provision instance | In progress (waitlisted, free pool full) | Jun 11 |
-| 1. Incident management | Not started | |
+| 0. Provision instance | Done | Jul 9 |
+| 1. Incident management | In progress | Jul 9 |
 | 2. Request management | Not started | |
 | 3. Catalog item and flow | Not started | |
 | 4. Knowledge base articles | Not started | |
