@@ -50,8 +50,8 @@ Nothing is built yet. This README is the plan and the outline. I will fill in ea
 
 | Component | Status |
 |---|---|
-| Personal Developer Instance provisioned | Not started |
-| Incident management | Not started |
+| Personal Developer Instance provisioned | Done |
+| Incident management | Done |
 | Request management | Not started |
 | Service catalog item | Not started |
 | Flow Designer workflow | Not started |
@@ -66,9 +66,17 @@ Each section below gets filled in as I complete it: what I did, why, the steps t
 
 ### 1. Incident and request management
 
-_To be documented. Goal: log an incident, set category and priority, assign it to a group, work it, and resolve it. Then do the same for a service request, and show both in a queue I can filter and report on._
+**Incident management is done.** I logged INC0010003 against a real problem I'd already solved and written up as a knowledge base article: a Linux client that couldn't reach hosts behind a Tailscale subnet router. Caller, category (Network), and short description came first, then impact and urgency, which ServiceNow uses to calculate a read-only priority field rather than letting an agent pick priority directly. One workstation affected (Impact: 3 - Low) blocking the user's work (Urgency: 2 - Medium) came out to Priority 4 - Low. Assignment group went to Network.
 
-<!-- screenshot added when this step is built: ![Incident list](images/incident-list.png) -->
+I worked it through its full lifecycle: New, then In Progress with a work note recording the actual diagnosis (Tailscale doesn't accept advertised subnet routes on Linux by default, the fix is `tailscale set --accept-routes`), then Resolved with a resolution code and notes, then Closed. Closing it dropped it out of an Active = true filter, which is the behavior that filter is supposed to have.
+
+I also built and saved a filtered, prioritized list of active incidents, sorted so 1 - Critical tickets sort to the top, the way a real service desk queue would read.
+
+The full worklog, including a couple of wrong turns (the Self Service view isn't the agent view, and Assigned to only accepts users with an agent role), is in [WALKTHROUGH.md](WALKTHROUGH.md#step-1-incident-management).
+
+![Active incidents, sorted by priority](images/incident-active-filtered-list.png)
+
+Request management is next: submit a service request and show how it differs from an incident.
 
 ### 2. Service catalog item with a Flow Designer workflow
 

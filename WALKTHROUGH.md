@@ -116,7 +116,39 @@ The list view now shows INC0010003 as In Progress, Priority 4 - Low, assigned to
 
 ![Incident list showing In Progress state](images/incident-list-in-progress.png)
 
-_Next: resolving the incident with resolution notes, then a filtered list view of active incidents._
+### Resolving and closing the incident
+
+On the Resolution Information tab, the Resolution code defaulted to "Resolved by request," which didn't fit, nothing was requested here, a technical cause was found and fixed. The dropdown offers Duplicate, Known error, No resolution provided, Resolved by caller, Resolved by change, Resolved by problem, Resolved by request, Solution provided, Workaround provided, and User error.
+
+![Resolution code options](images/incident-resolution-code-options.png)
+
+I picked Solution provided, since the assigned agent diagnosed the cause and applied a permanent fix rather than a workaround. Resolution notes:
+
+> Enabled route acceptance on the Linux client with `tailscale set --accept-routes`. Confirmed the advertised subnet routes through tailscale0 and the user can reach the remote hosts.
+
+Resolved by and Resolved are read-only until you act. They stamp themselves the moment you click Resolve.
+
+![Resolution notes set to Solution provided](images/incident-resolved-solution-provided.png)
+
+Clicking Resolve confirmed with a banner and dropped the incident to State Resolved in the list.
+
+![Incident resolved](images/incident-resolved-confirmation.png)
+
+From there I set State to Closed and used the Close Incident action, not a plain Update, the same way Resolve was its own action rather than a manual field save. That stamped it as permanently closed and it fell out of the Active = true filtered list entirely, since Closed incidents aren't active.
+
+![Incident closed and gone from active filter](images/incident-closed-confirmation.png)
+
+### Building a filtered list of active incidents
+
+Dropping the Caller condition on the default list exposed the full set of ServiceNow's built-in demo incidents, well over a dozen, on top of my own. I set a single condition, Active is true, and confirmed INC0010003 (closed) correctly dropped out of the results while INC0008111 (still New) stayed in. I added a sort on Priority, ascending, so 1 - Critical rows sort to the top instead of sitting wherever they land in the raw data, the order a real service desk queue would use.
+
+![Active filter with Priority sort configured](images/incident-active-filter-builder.png)
+
+I saved it as a named list view, "Active Incidents," visible to me, so it is a reusable list rather than a one-off query.
+
+![Active Incidents, sorted by Priority](images/incident-active-filtered-list.png)
+
+That closes out Step 1: an incident logged with a real caller, category, and description; worked through New, In Progress, Resolved, and Closed with work notes and resolution notes at each step; and a saved, prioritized view of active incidents.
 
 ## Step 2. Request management
 
