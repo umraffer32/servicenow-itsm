@@ -53,8 +53,8 @@ The instance is live and the first two areas are built. I fill in each section, 
 | Personal Developer Instance provisioned | Done |
 | Incident management | Done |
 | Request management | Done |
-| Service catalog item | Not started |
-| Flow Designer workflow | Not started |
+| Service catalog item | Done |
+| Flow Designer workflow | Done |
 | Knowledge base articles | Not started |
 | Role-Based Access Control (users, groups, roles) | Not started |
 | CMDB example | Not started |
@@ -86,9 +86,19 @@ The step also cost me time on a field that kept returning an empty picker, and t
 
 ### 2. Service catalog item with a Flow Designer workflow
 
-_To be documented. Goal: build a catalog item the user submits from the portal, for example a new laptop or software access request, and wire it to a Flow Designer flow that routes an approval and creates the fulfillment task automatically._
+**Done.** Step 2 consumed a catalog item ServiceNow ships with the instance. This one I built from nothing, which is the difference between using the platform and configuring it.
 
-<!-- screenshot added when this step is built: ![Catalog item and flow](images/flow-designer.png) -->
+The item is a VPN Access Request with three variables the requester fills in, a business justification, how long access is needed, and whether they're connecting from a company-managed laptop or a personal device. That last question is on the form because the answer changes the risk of granting the access, so it belongs in the record rather than in a follow-up email.
+
+![The item as a requester sees it](images/catalog-item-rendered.png)
+
+The flow behind it runs on Flow Designer, not the legacy Workflow engine that drives the demo content. Four steps. Ask for approval from the Network group, check whether the approval came back approved, create a fulfillment task for that group, and close the requested item once the task is done.
+
+![The flow](images/flow-designer-four-steps.png)
+
+I tested it three times over, as the requester, the approver, and the fulfiller. The interesting part is that it failed the first run. The task closed and the requested item stayed open, because the legacy workflow in Step 2 had closed its parent records automatically and I assumed a flow would too. It doesn't. Flow Designer only does what you write, so the closing step was missing. I added it, re-ran the whole thing on a fresh request, and watched the requested item close itself one second after the task did.
+
+The full account, including the wrong category I picked first and the one cosmetic gap I left unfixed, is in [WALKTHROUGH.md](WALKTHROUGH.md#step-3-service-catalog-item-with-a-flow-designer-workflow).
 
 ### 3. Knowledge base articles
 

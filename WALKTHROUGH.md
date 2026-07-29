@@ -260,7 +260,97 @@ Nothing in that last sequence was a manual state change. I closed one task and t
 
 ## Step 3. Service catalog item with a Flow Designer workflow
 
-_Not built yet. Goal: build a catalog item the user submits from the portal, then wire it to a Flow Designer flow that routes an approval and creates a fulfillment task automatically._
+Goal: build a catalog item the user submits from the portal, then wire it to a Flow Designer flow that routes an approval and creates a fulfillment task automatically.
+
+Step 2 consumed a catalog item ServiceNow ships with the instance. This step builds one from nothing, which is the difference between using the platform and configuring it.
+
+### Building the catalog item
+
+I built a VPN Access Request. It's the kind of item that genuinely needs an approval gate rather than one invented to have something to approve, and it gives Step 5 a real group to attach roles to later.
+
+New catalog items are created from the Catalog Items related list on the catalog record itself. The form asks for a name, a catalog, a category, and a short description.
+
+![The item record, with the category I picked first](images/catalog-item-form.png)
+
+I got the category wrong the first time. Security and Access sounded right, but the rendered breadcrumb came back as Service Catalog > Facilities > Security and Access, and that category sits under Facilities, so it means badges and keys and door access, not IT accounts. The right one was Application and Account Access, which lives under Software.
+
+Three variables, which are the questions the requester answers on the form. A catalog item without variables is just a button.
+
+![The three variables](images/catalog-item-variables.png)
+
+1. Why do you need VPN access? Multi line text, mandatory.
+2. How long do you need access? Select box with 30 days, 90 days, and Permanent.
+3. What device will you connect from? Select box with Company Managed Laptop and Personal Device.
+
+The third one is there for a reason. Whether someone is connecting from a managed laptop or a personal machine changes the risk of granting the access, so it belongs on the form rather than in a follow-up email.
+
+One thing to watch on select boxes. Adding choices through the inline row editor fills the Value column from the Text automatically on some rows and leaves it empty on others. An empty value stores a blank when the user picks that option, so it's worth checking both columns before moving on rather than finding out after a request comes through with nothing in it.
+
+Try It renders the item the way a requester sees it, with the mandatory markers and the populated dropdowns.
+
+![The item as a requester sees it](images/catalog-item-rendered.png)
+
+### Building the flow
+
+Flow Designer now lives inside Workflow Studio. The instance already had 71 flows in it, all shipped with the demo data, so a new one starts from New and then Flow.
+
+The trigger I needed was Service Catalog, which sits under the Application group rather than Record or Scheduled. Worth knowing, because the trigger doesn't ask which catalog item it belongs to. The relationship runs the other way. The item points at the flow through its Process Engine tab, and that tab spells out the constraint, only one engine can drive an item.
+
+![Flow attached to the catalog item](images/flow-attached-process-engine.png)
+
+Attaching the flow also cleared the Execution Plan field on its own, which is the same rule enforcing itself.
+
+The first version had three steps.
+
+![The flow, first version](images/flow-designer-active.png)
+
+1. **Ask For Approval** on the Requested Item record, with the rule set to Anyone approves and the approver set to the Network group. Setting a static group rather than a data pill takes the second of three small person icons next to the rule, which is not obvious.
+2. **If** the approval state is Approved.
+3. **Create Catalog Task** inside that If, with Short Description set and Assignment group set to Network.
+
+Gating the task behind the If is the part that matters. Ask For Approval pauses the flow, but it doesn't stop anything downstream on its own. Without the condition, a rejected request would still generate a fulfillment task.
+
+### Testing it as requester, approver, and fulfiller
+
+Ordering the item created REQ0010002 and RITM0010002. The order status screen looked thinner than the laptop's in Step 2, with an almost empty Stage column instead of an eight dot tracker, which is the first visible sign of a flow-driven item rather than a workflow-driven one. The Related Links on the RITM say Flow Context where the laptop said Show Workflow. That confirms Step 2's item runs on the legacy engine.
+
+The flow created five approval records, one for each member of the Network group, the same five accounts I'd confirmed as that group's membership back in Step 1. Anyone approves means one of the five is enough.
+
+Catalog Tasks stayed empty while those approvals sat pending.
+
+![No task while approval is pending](images/flow-task-gated-before-approval.png)
+
+Approving as ITIL User released it and SCTASK0010003 appeared, assigned to Network, with the short description the flow supplied.
+
+![Task created after approval](images/flow-task-created-after-approval.png)
+
+The related list needed a manual refresh before the task showed up, the same staleness I hit adding a group member in Step 2. Worth remembering before concluding something is broken.
+
+### Where it fell short, and the fix
+
+I closed the catalog task, and then the chain stopped.
+
+![Requested Item still open after the task closed](images/flow-ritm-stuck-open.png)
+
+State Open, with the task closed. In Step 2 the legacy workflow closed the requested item and the request without being asked. My flow did not, and the reason is simple once you see it. The legacy workflow was authored with explicit close steps. Mine ended after creating the task, so nothing closed the parent. Flow Designer gives you nothing for free.
+
+I left RITM0010002 in that state rather than closing it by hand, because a manually closed record would have hidden the defect from anyone reproducing this.
+
+The fix was a fourth action inside the If, an Update Record on the Requested Item setting State to Closed Complete, positioned after Create Catalog Task. Because the Create Catalog Task action has Wait selected, the flow holds there until the task closes, so the update runs at the right moment rather than immediately.
+
+![The flow, with the closing action added](images/flow-designer-four-steps.png)
+
+Editing an active flow leaves the change unpublished until you click Activate again. Save alone is not enough.
+
+Then I ran the whole thing a second time on a fresh request to prove the fix rather than assume it. REQ0010003 and RITM0010003, approved by ITIL User, task SCTASK0010004 closed at 13:39:53.
+
+![Requested Item closed by the flow](images/flow-ritm-closed-by-flow.png)
+
+The requested item flipped to Closed Complete at 13:39:54, one second later, without anyone touching it.
+
+One thing I did not fix. Stage still reads Request Approved on the closed record, because Stage is a separate field and nothing in my flow writes to it. The legacy engine maintains that label as a side effect of running. A flow only sets what you tell it to. State is the field that actually governs whether the item is open, so the record behaves correctly, but the label is cosmetically stale and I would rather say that than pretend the run was spotless.
+
+That is the real lesson from this step. The legacy workflow felt like it did more because it was carrying twenty years of built-in assumptions. Flow Designer is explicit, which means it is readable and maintainable, and it also means every state change you want is a step you have to write.
 
 ## Step 4. Knowledge base articles
 
