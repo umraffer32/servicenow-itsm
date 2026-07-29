@@ -1,6 +1,6 @@
 # Build Walkthrough
 
-_Last updated: July 9, 2026_
+_Last updated: July 29, 2026_
 
 This is the actual worklog. The [README](README.md) says what the project is and the [build plan](BUILD_PLAN.md) lays out the steps. This file is where I record what I actually did, in order, with screenshots, so the whole thing is reproducible from scratch.
 
@@ -94,7 +94,7 @@ Assignment group went to Network, the group that would actually own a routing pr
 
 ![Assignment group set to Network](images/incident-assignment-group.png)
 
-I added a description with the actual symptom before submitting: the user could reach the office LAN over Tailscale but not hosts on the remote subnet routed through it, and direct tailnet peers responded fine while only the subnet-routed hosts failed.
+I added a description with the actual symptom before submitting. The user could reach the office LAN over Tailscale but not hosts on the remote subnet routed through it, and direct tailnet peers responded fine while only the subnet-routed hosts failed.
 
 ![Description added, ready to submit](images/incident-description-ready-to-submit.png)
 
@@ -158,7 +158,7 @@ I saved it as a named list view, "Active Incidents," visible to me, so it is a r
 
 ![Active Incidents, sorted by Priority](images/incident-active-filtered-list.png)
 
-That closes out Step 1: an incident logged with a real caller, category, and description; worked through New, In Progress, Resolved, and Closed with work notes and resolution notes at each step; and a saved, prioritized view of active incidents.
+That closes out Step 1. I logged an incident with a real caller, category, and description, worked it through New, In Progress, Resolved, and Closed with notes at each step, and saved a prioritized view of what is still active.
 
 ## Step 2. Request management
 
@@ -260,11 +260,11 @@ Nothing in that last sequence was a manual state change. I closed one task and t
 
 ## Step 3. Service catalog item with a Flow Designer workflow
 
-_Pending the instance. Goal: build a catalog item the user submits from the portal, then wire it to a Flow Designer flow that routes an approval and creates a fulfillment task automatically._
+_Not built yet. Goal: build a catalog item the user submits from the portal, then wire it to a Flow Designer flow that routes an approval and creates a fulfillment task automatically._
 
 ## Step 4. Knowledge base articles
 
-_Pending the instance to publish. Goal: write two or three knowledge articles for a common fix and a standard procedure, categorize and publish them, and link one to a resolved incident._
+_Not built yet. Goal: write two or three knowledge articles for a common fix and a standard procedure, categorize and publish them, and link one to an incident. That incident has to be a new one worked only as far as In Progress, since closing INC0010003 locked most of its fields._
 
 Drafted and ready to paste into the knowledge base:
 
@@ -273,12 +273,12 @@ Drafted and ready to paste into the knowledge base:
 
 ## Step 5. Role-Based Access Control
 
-_Pending the instance. Goal: create users, put them in groups, assign roles, and show that access follows the role._
+_Not built yet. Goal: create users, put them in groups, assign roles, and show that access follows the role._
 
 ## Step 6. CMDB example
 
-_Pending the instance. Goal: add a few configuration items, give them a relationship or two, and attach one to an incident so the ticket shows the affected asset._
+_Not built yet. Goal: add a few configuration items, give them a relationship or two, and attach one to the still-open incident from Step 4 so the ticket shows the affected asset._
 
 ## Step 7. Dashboard and reporting
 
-_Pending the instance. Goal: build a dashboard with the active incident and request queue and a breakdown by priority or category._
+_Not built yet. Goal: build a dashboard with the active incident and request queue and a breakdown by priority or category._

@@ -1,6 +1,6 @@
 # ServiceNow Build Plan
 
-_Last updated: July 9, 2026_
+_Last updated: July 29, 2026_
 
 The working plan for this project. The README is the public-facing record. This file is how I run the build and track where I am.
 
@@ -51,7 +51,9 @@ I build in the order a real ticket flows, so each piece has something to connect
 ### Step 4. Knowledge base articles
 - Write two or three articles in plain language: one common fix and one standard procedure (a third if it adds value).
 - Categorize and publish them in a knowledge base.
-- Link one article to a resolved incident from Step 1 to show how knowledge cuts repeat tickets.
+- Link one article to an incident to show how knowledge cuts repeat tickets.
+
+**Log a second incident first.** INC0010003 from Step 1 is Closed, and closing an incident locks most of its fields. Configuration item is one of the locked ones, so Step 6 can't use it either. Log a fresh incident at the start of Step 4 and work it only as far as In Progress. Step 4 links the article to it and Step 6 attaches the configuration item to it. Do not resolve or close it until both steps are done, then close it last as the finale.
 
 ### Step 5. Role-Based Access Control
 - Create a few users. Create groups (for example Service Desk and an approver group). Assign roles.
@@ -61,7 +63,7 @@ I build in the order a real ticket flows, so each piece has something to connect
 ### Step 6. CMDB example
 - Add a handful of configuration items (CIs), for example a couple of laptops, a server, and a business service.
 - Create one or two relationships between them.
-- Attach a CI to the incident from Step 1 so the ticket shows the affected asset, which supports root cause analysis.
+- Attach a CI to the still-open incident logged in Step 4 so the ticket shows the affected asset, which supports root cause analysis. Not INC0010003, which is closed and locked.
 
 ### Step 7. Dashboard and reporting
 - Build a simple dashboard with the active incident and request queue and a breakdown by priority or category.

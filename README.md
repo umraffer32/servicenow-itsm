@@ -46,7 +46,7 @@ Reading about it is not the same as using it. This project is me using it. I sta
 
 ## Current Status
 
-Nothing is built yet. This README is the plan and the outline. I will fill in each section, mark it done, and add screenshots as I complete the work in the instance.
+The instance is live and the first two areas are built. I fill in each section, mark it done, and add screenshots as I finish the work in the instance.
 
 | Component | Status |
 |---|---|
@@ -66,7 +66,7 @@ Each section below gets filled in as I complete it: what I did, why, the steps t
 
 ### 1. Incident and request management
 
-**Incident management is done.** I logged INC0010003 against a real problem I'd already solved and written up as a knowledge base article: a Linux client that couldn't reach hosts behind a Tailscale subnet router. Caller, category (Network), and short description came first, then impact and urgency, which ServiceNow uses to calculate a read-only priority field rather than letting an agent pick priority directly. One workstation affected (Impact: 3 - Low) blocking the user's work (Urgency: 2 - Medium) came out to Priority 4 - Low. Assignment group went to Network.
+**Incident management is done.** I logged INC0010003 against a real problem I'd already solved and written up as a knowledge base article. A Linux client couldn't reach hosts behind a Tailscale subnet router. Caller, category (Network), and short description came first, then impact and urgency, which ServiceNow uses to calculate a read-only priority field rather than letting an agent pick priority directly. One workstation affected (Impact: 3 - Low) blocking the user's work (Urgency: 2 - Medium) came out to Priority 4 - Low. Assignment group went to Network.
 
 I worked it through its full lifecycle: New, then In Progress with a work note recording the actual diagnosis (Tailscale doesn't accept advertised subnet routes on Linux by default, the fix is `tailscale set --accept-routes`), then Resolved with a resolution code and notes, then Closed. Closing it dropped it out of an Active = true filter, which is the behavior that filter is supposed to have.
 
