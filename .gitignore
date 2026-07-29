@@ -27,3 +27,5 @@ instance-url.txt
 # Local notes not meant for the public repo
 scratch/
 TODO.local.md
+CLAUDE.md
+.claude/
