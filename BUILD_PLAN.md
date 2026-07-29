@@ -86,7 +86,7 @@ For every step:
 |---|---|---|
 | 0. Provision instance | Done | Jul 9 |
 | 1. Incident management | Done | Jul 9 |
-| 2. Request management | Not started | |
+| 2. Request management | Done | Jul 29 |
 | 3. Catalog item and flow | Not started | |
 | 4. Knowledge base articles | Not started | |
 | 5. RBAC | Not started | |

@@ -104,7 +104,17 @@ Submitting created INC0010003 with State New, Priority 4 - Low, Category Network
 
 ### Working the incident through its states
 
-The Assigned to field only accepts users with an agent role. Typing "System Administrator" came back invalid, since that account doesn't carry one by default in a fresh Personal Developer Instance. The picker on that field only offered five names: Bow Ruggeri, David Dan, David Loo, Fred Luddy, and ITIL User, all out-of-box demo agents that ship with the instance. I assigned it to ITIL User, the clearest of the five for a portfolio piece since it reads as an obvious demo account rather than a real name. Once RBAC is built in Step 5 with actual named users, I can come back and reassign this ticket to one of those instead.
+Typing "System Administrator" into Assigned to came back invalid. The picker offered five names instead, Bow Ruggeri, David Dan, David Loo, Fred Luddy, and ITIL User, all out-of-box demo accounts that ship with the instance.
+
+My first read on that was wrong, and I'm leaving the correction in rather than quietly fixing the sentence. I assumed the field was filtering to users who hold an agent role. It isn't. It filters to members of the assignment group, which I'd set to Network a moment earlier. Those five names are the Network group's membership.
+
+![Network group members](images/incident-network-group-members.png)
+
+I only confirmed that in Step 2, where the same field came back completely empty on a catalog task and forced me to go look at the group record. Same qualifier, same rule, and the group was empty. Full account is in [why the Assigned to field kept coming back empty](#why-the-assigned-to-field-kept-coming-back-empty).
+
+So System Administrator wasn't rejected for lacking a role. It just isn't in the Network group.
+
+I assigned the incident to ITIL User, the clearest of the five for a portfolio piece since it reads as an obvious demo account rather than a real name. Once RBAC is built in Step 5 with actual named users, I can come back and reassign this ticket to one of those instead.
 
 With Assigned to set, I moved State to In Progress and logged a work note with the real diagnosis:
 
@@ -152,7 +162,101 @@ That closes out Step 1: an incident logged with a real caller, category, and des
 
 ## Step 2. Request management
 
-_Pending the instance. Goal: submit a service request and show how it differs from an incident, through the request, the requested item, and the catalog task._
+Goal: submit a service request and show how it differs from an incident, through the request, the requested item, and the catalog task.
+
+An incident is something broken. A request is something wanted. ServiceNow keeps them on separate tables with different fields and a different lifecycle, and the point of this step is to walk one request end to end so the difference is visible rather than asserted.
+
+### Ordering from the service catalog
+
+The Service Catalog is the end user's front door. It's organized by category (Hardware, Software, Desktops, Mobiles, Peripherals, Office, Services) with a Top Requests panel on the right, and it reads like a storefront, not a ticket form.
+
+![Service Catalog home](images/request-service-catalog-home.png)
+
+I ordered a Standard Laptop, a Lenovo Carbon x1 at $1,100 with a five day delivery estimate. The item has its own variables rather than the generic fields an incident has. I checked Adobe Acrobat under Optional Software and filled in the free text box with "VPN client and standard office suite per department image."
+
+![Standard Laptop order form](images/request-standard-laptop-form.png)
+
+Order Now submitted it and returned an order status page with REQ0010001, an estimated delivery date of 2026-08-03, and a stage tracker showing eight steps with the first one lit. Nothing about this screen resembles an incident. There's no priority, no category, no assignment group, just a price, a delivery date, and a progress bar.
+
+![Order confirmation for REQ0010001](images/request-order-confirmation.png)
+
+### Request, Requested Item, and Catalog Task
+
+One catalog order creates three linked records, and understanding why is most of this step.
+
+**REQ0010001** is the Request, the shopping cart. It tracks Requested for, Price, Due date, Approval, and Request state, which came in as Pending Approval. It has no Category, Impact, Urgency, Priority, or Assignment group. Its Requested Items related list holds the actual thing ordered.
+
+![Request record REQ0010001](images/request-req-record.png)
+
+**RITM0010001** is the Requested Item, the line item. This is where the laptop itself lives, along with the variables I filled in on the catalog form and a read-only Stage field that showed Waiting for Approval. Worth noting from the Activities log at the bottom, this record does carry Impact 3 - Low and Priority 4 - Low under the hood. Requested Items extend the same base Task table an Incident does, so the plumbing is shared. The form just surfaces fulfillment fields instead of triage fields, because that's what the record is for.
+
+![Requested Item RITM0010001](images/request-ritm-record.png)
+
+Approval turned out to be two layers deep. Approving at the Request level moved Request state to Approved but the item's Stage advanced only as far as Dept. Head Approval, which is read-only and derived from the workflow, the same way Priority was calculated rather than typed on the incident. The Requested Item carried its own Approvers list with two entries, Natasha Ingram already approved and Bow Ruggeri still Requested.
+
+![Two approvers on the Requested Item](images/request-ritm-approvers.png)
+
+Approving the second one released the workflow, and a Catalog Task appeared.
+
+**SCTASK0010001** is the Catalog Task, the actual work order. Short description "Please fulfill this order," with instructions to pull from stock or order from the vendor and flag it Backordered with an estimated delivery date if it has to be ordered. This is the record a fulfiller works, and it has the fields you'd expect for that, Assigned to, State, Priority, and Work notes.
+
+![Catalog Task SCTASK0010001](images/request-catalog-task.png)
+
+So the chain runs Request (what was ordered and approved), Requested Item (which item, with the options chosen), and Catalog Task (who does the work). An incident collapses all three into one record because there's nothing to approve and nothing to fulfill, there's just something broken that needs fixing.
+
+### Why the Assigned to field kept coming back empty
+
+This is the part that took the longest, and the reason is worth writing down.
+
+Trying to assign SCTASK0010001, I typed a name into Assigned to and got a red invalid field. Opening the picker instead gave me an empty list. Not a short list, an empty one, "No records to display" on a table that plainly has users in it.
+
+The field is a reference to the user table with a qualifier on it, and on a catalog task that qualifier limits the choices to members of the task's assignment group. This task had no assignment group. The form didn't even have the field on it, which is why there was nowhere obvious to set one.
+
+I added it through the form layout editor, reached from the hamburger menu next to the record title, then Configure and Form Layout. Assignment group moved from Available to Selected, positioned just above Assigned to since the group gets filled in first.
+
+Worth knowing before you do this. Editing the Default view changes the form for every catalog task in the instance, not just the one you're looking at. That's usually what you want, but it isn't a local change.
+
+With Assignment group set to Hardware, the picker offered ITIL User and the assignment went through. Work notes recorded the fulfillment.
+
+![Catalog task assigned to Hardware and ITIL User](images/request-catalog-task-assigned.png)
+
+Close Task set State to Closed Complete, cleared the Active flag, and stamped the activity log.
+
+![First catalog task closed](images/request-catalog-task-closed.png)
+
+### A second task, and the same problem for a different reason
+
+Closing the first task immediately created a second one. SCTASK0010002, "Please deploy item to the user," assigned to the Field Services group, opened at 09:35:22, the same second the first one closed. The workflow splits fulfillment into procure and deploy, so the Requested Item wasn't going anywhere until both were done.
+
+This one already had an assignment group, so by my own explanation the picker should have worked. It came back empty again.
+
+Rather than guess a second time, I opened the group itself. Field Services had two roles and zero members.
+
+![Field Services group with no members](images/request-field-services-empty.png)
+
+That's the real rule. The qualifier filters to group members, so an empty group produces an empty list whether or not a group is set. Hardware worked because ITIL User happened to belong to it. My first explanation was right about the mechanism and wrong about which condition had failed.
+
+I added ITIL User to Field Services through the Edit picker on Group Members. The save queues a background job to propagate the group's roles to the user, so the related list still read empty until I reloaded the record.
+
+![ITIL User added to Field Services](images/request-field-services-member-added.png)
+
+Back on SCTASK0010002 the picker worked with no form changes needed, since the layout edit had already applied instance-wide.
+
+### The chain closing itself
+
+Closing the deploy task finished the sequence. Both catalog tasks show an Actual end, both assigned to ITIL User, and the Requested Item flipped to Closed Complete at 09:50:56, the moment the last task closed.
+
+![Both catalog tasks complete](images/request-ritm-tasks-complete.png)
+
+RITM0010001 Stage reads Completed and State reads Closed Complete.
+
+![Requested Item completed](images/request-ritm-completed.png)
+
+REQ0010001 followed with Approval Approved and Request state Closed Complete, and the stage tracker on the requested item filled in green.
+
+![Request closed complete](images/request-req-closed.png)
+
+Nothing in that last sequence was a manual state change. I closed one task and the item and the request closed themselves, because the workflow owns the parent states and the tasks own the work. That's the structural difference from an incident, where I set every state by hand. A request is a workflow with records attached. An incident is a record with a state field.
 
 ## Step 3. Service catalog item with a Flow Designer workflow
 

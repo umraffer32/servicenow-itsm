@@ -52,7 +52,7 @@ Nothing is built yet. This README is the plan and the outline. I will fill in ea
 |---|---|
 | Personal Developer Instance provisioned | Done |
 | Incident management | Done |
-| Request management | Not started |
+| Request management | Done |
 | Service catalog item | Not started |
 | Flow Designer workflow | Not started |
 | Knowledge base articles | Not started |
@@ -72,11 +72,17 @@ I worked it through its full lifecycle: New, then In Progress with a work note r
 
 I also built and saved a filtered, prioritized list of active incidents, sorted so 1 - Critical tickets sort to the top, the way a real service desk queue would read.
 
-The full worklog, including a couple of wrong turns (the Self Service view isn't the agent view, and Assigned to only accepts users with an agent role), is in [WALKTHROUGH.md](WALKTHROUGH.md#step-1-incident-management).
+The full worklog, including a couple of wrong turns (the Self Service view isn't the agent view, and my first explanation for why the Assigned to picker rejected an account turned out to be wrong), is in [WALKTHROUGH.md](WALKTHROUGH.md#step-1-incident-management).
 
 ![Active incidents, sorted by priority](images/incident-active-filtered-list.png)
 
-Request management is next: submit a service request and show how it differs from an incident.
+**Request management is done.** I ordered a Standard Laptop from the Service Catalog with an optional software selection, and followed it all the way through fulfillment. One order creates three linked records, and the split is the whole point. REQ0010001 is the request, what was ordered and approved. RITM0010001 is the requested item, which laptop with which options. SCTASK0010001 and SCTASK0010002 are the catalog tasks, the actual work of pulling it from stock and deploying it to the user.
+
+Approval ran two layers deep, once at the request and again at the item for department head sign-off, and the item's Stage field is read-only because the workflow owns it. Closing the last task closed the item and the request on their own. I never set those states by hand, which is the structural difference from an incident.
+
+The step also cost me time on a field that kept returning an empty picker, and the fix touched real admin work. Assigned to on a catalog task filters to members of the assignment group, so it stayed empty first because the form had no Assignment group field at all, then again because the Field Services group had zero members. Fixing it meant editing the form layout and adding a user to a group. Both are written up in [WALKTHROUGH.md](WALKTHROUGH.md#step-2-request-management).
+
+![Request closed complete](images/request-req-closed.png)
 
 ### 2. Service catalog item with a Flow Designer workflow
 
