@@ -150,7 +150,7 @@ From there I set State to Closed and used the Close Incident action, not a plain
 
 ### Building a filtered list of active incidents
 
-Dropping the Caller condition on the default list exposed the full set of ServiceNow's built-in demo incidents, well over a dozen, on top of my own. I set a single condition, Active is true, and confirmed INC0010003 (closed) correctly dropped out of the results while INC0008111 (still New) stayed in. I added a sort on Priority, ascending, so 1 - Critical rows sort to the top instead of sitting wherever they land in the raw data, the order a real service desk queue would use.
+Dropping the Caller condition on the default list exposed a screen full of ServiceNow's built-in demo incidents on top of my own. I set a single condition, Active is true, and confirmed INC0010003 (closed) correctly dropped out of the results while INC0008111 (still New) stayed in. I added a sort on Priority, ascending, so 1 - Critical rows sort to the top instead of sitting wherever they land in the raw data, the order a real service desk queue would use.
 
 ![Active filter with Priority sort configured](images/incident-active-filter-builder.png)
 
@@ -272,7 +272,7 @@ New catalog items are created from the Catalog Items related list on the catalog
 
 ![The item record, with the category I picked first](images/catalog-item-form.png)
 
-I got the category wrong the first time. Security and Access sounded right, but the rendered breadcrumb came back as Service Catalog > Facilities > Security and Access, and that category sits under Facilities, so it means badges and keys and door access, not IT accounts. The right one was Application and Account Access, which lives under Software.
+I got the category wrong the first time. Security and Access sounded right, but the rendered breadcrumb came back as Service Catalog > Facilities > Security and Access, and sitting under Facilities put it with building services rather than IT accounts. The right one was Application and Account Access, which lives under Software.
 
 Three variables, which are the questions the requester answers on the form. A catalog item without variables is just a button.
 
@@ -292,7 +292,7 @@ Try It renders the item the way a requester sees it, with the mandatory markers 
 
 ### Building the flow
 
-Flow Designer now lives inside Workflow Studio. The instance already had 71 flows in it, all shipped with the demo data, so a new one starts from New and then Flow.
+Flow Designer now lives inside Workflow Studio. The instance already had 71 flows in it, none of them mine, so a new one starts from New and then Flow.
 
 The trigger I needed was Service Catalog, which sits under the Application group rather than Record or Scheduled. Worth knowing, because the trigger doesn't ask which catalog item it belongs to. The relationship runs the other way. The item points at the flow through its Process Engine tab, and that tab spells out the constraint, only one engine can drive an item.
 
@@ -308,7 +308,7 @@ The first version had three steps.
 2. **If** the approval state is Approved.
 3. **Create Catalog Task** inside that If, with Short Description set and Assignment group set to Network.
 
-Gating the task behind the If is the part that matters. Ask For Approval pauses the flow, but it doesn't stop anything downstream on its own. Without the condition, a rejected request would still generate a fulfillment task.
+Gating the task behind the If is the part that matters. Ask For Approval pauses the flow until someone decides, but it resumes either way, approved or rejected. The condition is what keeps a rejection from producing a fulfillment task anyway. I only ran the approved path, so that is the reason for the design rather than something I watched fail.
 
 ### Testing it as requester, approver, and fulfiller
 
@@ -350,7 +350,7 @@ The requested item flipped to Closed Complete at 13:39:54, one second later, wit
 
 One thing I did not fix. Stage still reads Request Approved on the closed record, because Stage is a separate field and nothing in my flow writes to it. The legacy engine maintains that label as a side effect of running. A flow only sets what you tell it to. State is the field that actually governs whether the item is open, so the record behaves correctly, but the label is cosmetically stale and I would rather say that than pretend the run was spotless.
 
-That is the real lesson from this step. The legacy workflow felt like it did more because it was carrying twenty years of built-in assumptions. Flow Designer is explicit, which means it is readable and maintainable, and it also means every state change you want is a step you have to write.
+That is the real lesson from this step. The legacy workflow felt like it did more because that behavior was baked into the engine. Flow Designer is explicit, which means it is readable and maintainable, and it also means every state change you want is a step you have to write.
 
 ## Step 4. Knowledge base articles
 

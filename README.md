@@ -96,7 +96,7 @@ The flow behind it runs on Flow Designer, not the legacy Workflow engine that dr
 
 ![The flow](images/flow-designer-four-steps.png)
 
-I tested it three times over, as the requester, the approver, and the fulfiller. The interesting part is that it failed the first run. The task closed and the requested item stayed open, because the legacy workflow in Step 2 had closed its parent records automatically and I assumed a flow would too. It doesn't. Flow Designer only does what you write, so the closing step was missing. I added it, re-ran the whole thing on a fresh request, and watched the requested item close itself one second after the task did.
+I drove it end to end in all three roles, as the requester, the approver, and the fulfiller. The interesting part is that it failed the first run. The task closed and the requested item stayed open, because the legacy workflow in Step 2 had closed its parent records automatically and I assumed a flow would too. It doesn't. Flow Designer only does what you write, so the closing step was missing. I added it, re-ran the whole thing on a fresh request, and watched the requested item close itself one second after the task did.
 
 The full account, including the wrong category I picked first and the one cosmetic gap I left unfixed, is in [WALKTHROUGH.md](WALKTHROUGH.md#step-3-service-catalog-item-with-a-flow-designer-workflow).
 
