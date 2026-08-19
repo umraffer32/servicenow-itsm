@@ -1,6 +1,6 @@
 # ServiceNow Build Plan
 
-_Last updated: July 29, 2026_
+_Last updated: August 19, 2026_
 
 The working plan for this project. The README is the public-facing record. This file is how I run the build and track where I am.
 
@@ -8,7 +8,7 @@ The working plan for this project. The README is the public-facing record. This 
 
 Stand up a complete IT Service Management (ITSM) slice in a free ServiceNow Personal Developer Instance (PDI), document each piece in the README with screenshots, and publish the repository at github.com/umraffer32. This closes the one honest gap in my California state IT applications, since ServiceNow is weighted heavily in the help desk specialist duty statement (RPA 30622, JC-520758) and I had not used it hands-on before.
 
-Tie-in deadline: JC-520758 final filing date is June 19, 2026. The project does not have to be large. It has to be real, complete, and reproducible.
+The project does not have to be large. It has to be real, complete, and reproducible.
 
 ## Scope
 
@@ -16,7 +16,7 @@ Five areas, each tied to a real duty from the role:
 
 1. Incident and request management.
 2. A service catalog item with a Flow Designer workflow.
-3. Two or three knowledge base articles.
+3. Two knowledge base articles.
 4. Role-Based Access Control (RBAC): users, groups, roles.
 5. A small Configuration Management Database (CMDB) example.
 
@@ -49,7 +49,7 @@ I build in the order a real ticket flows, so each piece has something to connect
 - Document the form, the flow diagram, and the run.
 
 ### Step 4. Knowledge base articles
-- Write two or three articles in plain language: one common fix and one standard procedure (a third if it adds value).
+- Publish the two articles already drafted: one common fix and one standard procedure.
 - Categorize and publish them in a knowledge base.
 - Link one article to an incident to show how knowledge cuts repeat tickets.
 
@@ -69,10 +69,9 @@ I build in the order a real ticket flows, so each piece has something to connect
 - Build a simple dashboard with the active incident and request queue and a breakdown by priority or category.
 - This is the ServiceNow Dashboards and Reports duty.
 
-### Step 8. Publish and tie back to the application
+### Step 8. Publish
 - Final pass on the README, confirm every section has steps and a screenshot.
 - Create the public repository at github.com/umraffer32 and push.
-- Re-tailor the JC-520758 resume and SOQ to reference the project (see the CalCareers progress log next steps), and add ServiceNow to the skills line.
 
 ## How each piece gets documented
 
@@ -90,7 +89,7 @@ For every step:
 | 1. Incident management | Done | Jul 9 |
 | 2. Request management | Done | Jul 29 |
 | 3. Catalog item and flow | Done | Jul 29 |
-| 4. Knowledge base articles | Not started | |
+| 4. Knowledge base articles | Done | Aug 19 |
 | 5. RBAC | Not started | |
 | 6. CMDB | Not started | |
 | 7. Dashboard and reporting | Not started | |

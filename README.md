@@ -19,7 +19,7 @@ A small but complete ITSM slice in one instance, covering the core help desk wor
 
 - **Incident and request management.** Log, categorize, prioritize, assign, and resolve incidents and requests, and read the queue from a dashboard.
 - **A service catalog item with a Flow Designer workflow.** A request the end user submits from the portal that kicks off an automated approval and fulfillment flow.
-- **Knowledge base articles.** Two or three articles that document a common fix and a standard procedure, the way a real knowledge base reduces repeat tickets.
+- **Knowledge base articles.** Two articles that document a common fix and a standard procedure, the way a real knowledge base reduces repeat tickets.
 - **Role-Based Access Control (RBAC).** Users, groups, and roles set up so the right people see and do the right things, and nobody sees what they should not.
 - **A Configuration Management Database (CMDB) example.** A handful of configuration items (CIs) and relationships, linked to incidents so a ticket shows the asset it affects.
 
@@ -46,7 +46,7 @@ Reading about it is not the same as using it. This project is me using it. I sta
 
 ## Current Status
 
-The instance is live and the first two areas are built. I fill in each section, mark it done, and add screenshots as I finish the work in the instance.
+The instance is live and the first three areas are built. I fill in each section, mark it done, and add screenshots as I finish the work in the instance.
 
 | Component | Status |
 |---|---|
@@ -55,7 +55,7 @@ The instance is live and the first two areas are built. I fill in each section, 
 | Request management | Done |
 | Service catalog item | Done |
 | Flow Designer workflow | Done |
-| Knowledge base articles | Not started |
+| Knowledge base articles | Done |
 | Role-Based Access Control (users, groups, roles) | Not started |
 | CMDB example | Not started |
 | Dashboard and reporting | Not started |
@@ -86,7 +86,7 @@ The step also cost me time on a field that kept returning an empty picker, and t
 
 ### 2. Service catalog item with a Flow Designer workflow
 
-**Done.** Step 2 consumed a catalog item ServiceNow ships with the instance. This one I built from nothing, which is the difference between using the platform and configuring it.
+**Done.** The laptop order above consumed a catalog item ServiceNow ships with the instance. This one I built from nothing, which is the difference between using the platform and configuring it.
 
 The item is a VPN Access Request with three variables the requester fills in, a business justification, how long access is needed, and whether they're connecting from a company-managed laptop or a personal device. That last question is on the form because the answer changes the risk of granting the access, so it belongs in the record rather than in a follow-up email.
 
@@ -102,9 +102,15 @@ The full account, including the wrong category I picked first and the one cosmet
 
 ### 3. Knowledge base articles
 
-_To be documented. Goal: write two or three knowledge articles in plain language for a common fix and a standard procedure, categorize them, publish them, and link one to a resolved incident._
+**Done.** I published two articles I'd already written, [KB0010001, a Tailscale subnet routing fix](knowledge-base/kb01-linux-tailscale-subnet-routes.md), and [KB0010002, an SSH key-based authentication hardening procedure](knowledge-base/kb02-ssh-key-based-authentication.md), into the instance's IT knowledge base. Neither of the categories the drafts specified existed out of the box, so I added Network and Remote Access and Security and Hardening to the knowledge base rather than force them into a category that didn't fit.
 
-<!-- screenshot added when this step is built: ![Knowledge article](images/kb-article.png) -->
+The article editor is a block-based page builder, not a plain text field. I converted each draft to HTML and pasted it into the editor's raw code view instead of building it block by block. Publishing routes through an approval workflow, and along the way I copy-pasted my own instruction text into a Short description field by mistake, catching it live on the published article and fixing it through a Checkout action.
+
+I logged a second incident, INC0010012, tied to the SSH hardening article, and linked the article to it directly from the incident form.
+
+![KB0010002 published in the IT knowledge base](images/kb0010002-published-final.png)
+
+The full account, including the block editor, the approval workflow, and the short description bug, is in [WALKTHROUGH.md](WALKTHROUGH.md#step-4-knowledge-base-articles).
 
 ### 4. Role-Based Access Control
 
@@ -118,9 +124,15 @@ _To be documented. Goal: add a small set of configuration items, give them a rel
 
 <!-- screenshot added when this step is built: ![CMDB configuration items](images/cmdb-ci.png) -->
 
+### 6. Dashboard and reporting
+
+_To be documented. Goal: build a dashboard with the active incident and request queue and a breakdown by priority or category._
+
+<!-- screenshot added when this step is built: ![Incident and request dashboard](images/dashboard.png) -->
+
 ## How This Maps to the Role
 
-This build is scoped against the published duty statement for the Information Technology Specialist I help desk role (RPA 30622, JC-520758, Department of General Services, Enterprise Technology Solutions). The mapping:
+This build is scoped against the published duty statement for an Information Technology Specialist I help desk role at the California Department of General Services, Enterprise Technology Solutions. The mapping:
 
 | Duty from the statement | Where it shows up here |
 |---|---|

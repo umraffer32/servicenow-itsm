@@ -1,6 +1,6 @@
 # Build Walkthrough
 
-_Last updated: July 29, 2026_
+_Last updated: August 19, 2026_
 
 This is the actual worklog. The [README](README.md) says what the project is and the [build plan](BUILD_PLAN.md) lays out the steps. This file is where I record what I actually did, in order, with screenshots, so the whole thing is reproducible from scratch.
 
@@ -354,12 +354,178 @@ That is the real lesson from this step. The legacy workflow felt like it did mor
 
 ## Step 4. Knowledge base articles
 
-_Not built yet. Goal: write two or three knowledge articles for a common fix and a standard procedure, categorize and publish them, and link one to an incident. That incident has to be a new one worked only as far as In Progress, since closing INC0010003 locked most of its fields._
+Goal: publish the two knowledge articles already drafted, one for a common fix and one for a standard procedure, categorize them, and link one to an incident. That incident has to be a new one worked only as far as In Progress, since closing INC0010003 locked most of its fields.
 
 Drafted and ready to paste into the knowledge base:
 
 1. [Linux client cannot reach hosts behind a Tailscale subnet router](knowledge-base/kb01-linux-tailscale-subnet-routes.md) (troubleshooting, common fix)
 2. [Configure SSH for key-based authentication and disable password login](knowledge-base/kb02-ssh-key-based-authentication.md) (how-to, hardening procedure)
+
+### Logging a fresh incident
+
+KB01 already ties to INC0010003 from Step 1. For this step I logged a second incident tied to KB02's SSH hardening procedure, a Linux server flagged by a vulnerability scan for having SSH password authentication enabled.
+
+New from the incident list dropped me on the same Self Service form as Step 1, Number, Caller, Watch list, Urgency, State, Short description, nothing else.
+
+![Self Service form again](images/inc0010012-self-service-form.png)
+
+I didn't submit it. Same fix as Step 1, switch the list to Default view and click New from there for the full form.
+
+The Category dropdown on the full form doesn't have a Security option. The instance ships with six: Inquiry / Help, Software, Hardware, Network, Database, Password Reset.
+
+![Category dropdown options](images/inc0010012-category-options.png)
+
+I picked Software. This is an OpenSSH server configuration issue, not a password reset request and not a network problem.
+
+For Impact and Urgency: one server affected, not a site or a team, so Impact went to 3 - Low. Nothing was down and no one was blocked, but it's an active security exposure, an attacker could get in with a guessed password, so Urgency went to 2 - Medium. Priority calculated to 4 - Low, same as INC0010003.
+
+![Impact, Urgency, and calculated Priority](images/inc0010012-impact-urgency-priority.png)
+
+### Finding an assignment group
+
+The instance has 44 groups. I searched "Security" first, hoping for a dedicated group.
+
+![Full groups list, first 20 of 44](images/inc0010012-assignment-group-list.png)
+
+The search box turned out to sort alphabetically from the term rather than filter by substring, so "Security" landed on Service Desk, Software, Team Development Code Reviewers, and the US Presidents groups, nothing with "Security" in the name.
+
+![Groups search jumping alphabetically from "security"](images/inc0010012-assignment-group-search.png)
+
+No dedicated Security group exists, but Software does, and it matches the Category I'd already set. I used that.
+
+![Assignment group set to Software](images/inc0010012-assignment-group-set.png)
+
+Description before submitting:
+
+> A vulnerability scan of the Linux application server found OpenSSH configured with PasswordAuthentication enabled. Password login is exposed to brute-force attempts. Needs to be moved to key-based authentication with password login disabled.
+
+![Description added, ready to submit](images/inc0010012-description.png)
+
+Submitting created INC0010012, State New, Priority 4 - Low, Category Software, Assignment group Software. The list also shows a stray leftover record, "NO!! I will not DO things for you.", that neither of us created, unrelated instance clutter from earlier testing.
+
+![INC0010012 submitted](images/inc0010012-submitted-list.png)
+
+### Assigning and working the incident
+
+Same qualifier as Step 1's Network group: Assigned to filters to members of the assignment group, not to a role. The Software group has five members, Beth Anglin, David Loo, Don Goodliffe, Fred Luddy, and ITIL User.
+
+![Software group members](images/inc0010012-assignment-group-members.png)
+
+I assigned it to ITIL User, the same demo account used for INC0010003, so the walkthrough stays consistent. State went to In Progress with a work note:
+
+> Confirmed sshd_config on the flagged host has PasswordAuthentication yes. Following the SSH key-based authentication KB procedure to generate a key, install it, verify key login, then disable password authentication.
+
+![Work note logged, incident In Progress, assigned to ITIL User](images/inc0010012-work-note-in-progress.png)
+
+INC0010012 stays at In Progress here. Linking the KB02 article comes next, and it has to stay open until Step 6 attaches a configuration item to it too.
+
+### Finding the knowledge base module
+
+Searching "knowledge" in the All menu turned up several unrelated matches, an Authentication Factors module also named Knowledge Based Factor, a Self-Service knowledge article view, and a System Mobile "Knowledge Bases" entry that turned out to be part of the mobile app configuration, not article management.
+
+![First search, mostly wrong modules](images/kb-search-wrong-modules.png)
+
+Narrowing to "knowledge base" surfaced the real one: Knowledge > Administration > Knowledge Bases.
+
+![Second search finds the right module](images/kb-search-knowledge-bases-found.png)
+
+That opened a list of four knowledge bases the instance ships with, KCS Knowledge Base (demo data), Known Error, Knowledge, and IT, "The ACME North America IT Service Desk Knowledge Base." IT is the one both drafts specify.
+
+![Administration - Knowledge Bases list](images/kb-admin-knowledge-bases-list.png)
+
+### Adding the two categories
+
+The IT knowledge base record showed its publish workflow is "Knowledge - Approval Publish," meaning new articles need approval before going live, and it already had 42 articles and 8 categories.
+
+![IT knowledge base record](images/kb-it-knowledge-base-record.png)
+
+The 8 existing categories, News, Applications, Devices, IT, Email, Suppliers, Operating Systems, Service Design Package, don't include what either draft specifies. KB01 wants "Network and Remote Access," KB02 wants "Security and Hardening." Category editing wasn't disabled on this knowledge base, so I added both rather than force the articles into a category that didn't fit.
+
+![The original 8 categories](images/kb-original-8-categories.png)
+
+First attempt at the label came out "Network Remote Access," missing "and." Caught it before saving and fixed it to match the draft exactly.
+
+![Category label typo, caught before saving](images/kb-category-label-typo.png)
+
+Both categories in, 10 total.
+
+![10 categories, both new ones added](images/kb-categories-10-final.png)
+
+### Writing KB01 in the block editor
+
+New from the Knowledge (42) list assigned KB0010001, defaulted Knowledge base to IT, no Article type field on this create layout despite the draft listing one, the instance just doesn't expose it there.
+
+![Blank create form](images/kb01-create-form-blank.png)
+
+Short description and Category set to match the draft.
+
+![Short description and Category set](images/kb01-fields-set.png)
+
+The content area is a block-based page builder, not a text field, clicking into blank canvas does nothing. I initially assumed it needed a Text Section component dragged in first, but the real fix was the `</>` Edit code icon in the toolbar, which opens a raw HTML editor.
+
+![Edit code dialog, default placeholder content](images/kb01-edit-code-dialog.png)
+
+I converted the full KB01 markdown to HTML by hand and pasted it in wholesale rather than fighting the block editor line by line. It rendered clean, headings, lists, and code blocks all came through, 556 words.
+
+![Full article rendered from pasted HTML](images/kb01-html-pasted-rendered.png)
+
+### Publish, approve, and a copy-paste bug
+
+Publish didn't go live directly, it routed to the KB's approval workflow, "Knowledge - Approval Publish," waiting on Bernard Laboy, the IT knowledge base's owner.
+
+![Approval requested, waiting on Bernard Laboy](images/kb01-approval-requested.png)
+
+As admin I approved it directly rather than impersonating Bernard Laboy.
+
+![Approved, KB0010001 v1.0](images/kb01-approved-v1.png)
+
+I copy-pasted my own instruction text into the Short description field instead of just the article title, so the field read `Linux client cannot reach hosts behind a Tailscale subnet router" (matches the KB01 draft exactly)`, a stray quote and my parenthetical both included. It was visible right on the public article page.
+
+![The pasted-instruction bug, visible on the live article](images/kb01-bug-found-in-rendered-view.png)
+
+Fixing it took a few wrong turns of my own, since the article was Published I couldn't edit the field directly, I had to find a Checkout action first, which pulls it back into a draft. Once checked out, the Short description field turned out to be behind a collapsed side panel I initially couldn't locate. The two versions sat side by side afterward, v1.0 with the bad text still Published, v1.02 with the correct text in Review.
+
+![v1.0 with the bug, v1.02 corrected and in review](images/kb01-two-versions-comparison.png)
+
+Approving v1.02 promoted it to v2.0 Published and superseded v1.0 as the live version. This time I typed the short description directly instead of copying it from chat.
+
+### KB02, the same process, no repeat of the bug
+
+KB0010002, Category Security and Hardening, HTML pasted the same way as KB01, 582 words.
+
+![KB0010002 create form](images/kb02-create-form.png)
+
+Same approval cycle, approved cleanly to v1.0 with no short description bug this time.
+
+![KB0010002 approved, v1.0](images/kb02-approved-v1.png)
+
+### Linking KB02 to the incident
+
+INC0010012's "Related Search Results" panel, set to "Knowledge & Catalog (All)," returned only service catalog items, Password Reset, Endpoint Security, a couple of server catalog entries, nothing from the knowledge base.
+
+![Related Search Results defaulting to catalog items](images/inc-related-search-catalog-only.png)
+
+Narrowing the filter dropdown to "Knowledge Articles" surfaced KB0010002 directly.
+
+![Knowledge Articles filter finds KB0010002](images/inc-related-search-knowledge-found.png)
+
+Clicking Attach dropped raw markup into the Additional comments field instead of a rendered link, `[code]<a title="..." href='kb_view.do?...'>...</a>[/code]`, literal brackets and all. I assumed this was a Self Service view limitation, since that view had caused problems twice already in Step 1 and Step 2.
+
+![Raw markup in Self Service view](images/inc-attach-raw-markup-selfservice.png)
+
+Switching to Default view and repeating the search and Attach produced the identical raw text, so the Self Service theory was wrong.
+
+![Default view, same Attach action available](images/inc-attach-default-view.png)
+
+![Same raw markup shows up in Default view too](images/inc-attach-raw-markup-defaultview.png)
+
+The `[code]...[/code]` wrapping turned out to be intentional, ServiceNow's syntax for embedding a link inside a plain-text journal field. It looks like broken markup in the input box but renders as an actual clickable link once posted.
+
+![KB0010002 confirmed clean: Published, correct short description, Security and Hardening category](images/kb0010002-published-final.png)
+
+![The rendered link on INC0010012's activity log, and the record showing State In Progress with the KB article linked](images/inc0010012-kb-linked-final.png)
+
+Both articles are published in the IT knowledge base now, KB0010001 categorized Network and Remote Access, KB0010002 categorized Security and Hardening, and KB0010002 is linked to INC0010012, which stays In Progress until Step 6 attaches a configuration item to it.
 
 ## Step 5. Role-Based Access Control
 
