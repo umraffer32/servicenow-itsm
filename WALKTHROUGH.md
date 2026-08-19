@@ -6,6 +6,45 @@ This is the actual worklog. The [README](README.md) says what the project is and
 
 I am building in a free ServiceNow Personal Developer Instance (PDI). Each step below is the real work as it happened, including the parts that did not go smoothly.
 
+## Contents
+
+- [Step 0. Set up the developer instance](#step-0-set-up-the-developer-instance)
+  - [Create a ServiceNow ID](#create-a-servicenow-id)
+  - [Get to the right place](#get-to-the-right-place)
+  - [Finish the developer onboarding](#finish-the-developer-onboarding)
+  - [Request the instance](#request-the-instance)
+  - [Reality check: the free instance pool was full](#reality-check-the-free-instance-pool-was-full)
+- [Step 1. Incident management](#step-1-incident-management)
+  - [Finding the incident form](#finding-the-incident-form)
+  - [Logging the incident](#logging-the-incident)
+  - [Working the incident through its states](#working-the-incident-through-its-states)
+  - [Resolving and closing the incident](#resolving-and-closing-the-incident)
+  - [Building a filtered list of active incidents](#building-a-filtered-list-of-active-incidents)
+- [Step 2. Request management](#step-2-request-management)
+  - [Ordering from the service catalog](#ordering-from-the-service-catalog)
+  - [Request, Requested Item, and Catalog Task](#request-requested-item-and-catalog-task)
+  - [Why the Assigned to field kept coming back empty](#why-the-assigned-to-field-kept-coming-back-empty)
+  - [A second task, and the same problem for a different reason](#a-second-task-and-the-same-problem-for-a-different-reason)
+  - [The chain closing itself](#the-chain-closing-itself)
+- [Step 3. Service catalog item with a Flow Designer workflow](#step-3-service-catalog-item-with-a-flow-designer-workflow)
+  - [Building the catalog item](#building-the-catalog-item)
+  - [Building the flow](#building-the-flow)
+  - [Testing it as requester, approver, and fulfiller](#testing-it-as-requester-approver-and-fulfiller)
+  - [Where it fell short, and the fix](#where-it-fell-short-and-the-fix)
+- [Step 4. Knowledge base articles](#step-4-knowledge-base-articles)
+  - [Logging a fresh incident](#logging-a-fresh-incident)
+  - [Finding an assignment group](#finding-an-assignment-group)
+  - [Assigning and working the incident](#assigning-and-working-the-incident)
+  - [Finding the knowledge base module](#finding-the-knowledge-base-module)
+  - [Adding the two categories](#adding-the-two-categories)
+  - [Writing KB01 in the block editor](#writing-kb01-in-the-block-editor)
+  - [Publish, approve, and a copy-paste bug](#publish-approve-and-a-copy-paste-bug)
+  - [KB02, the same process, no repeat of the bug](#kb02-the-same-process-no-repeat-of-the-bug)
+  - [Linking KB02 to the incident](#linking-kb02-to-the-incident)
+- [Step 5. Role-Based Access Control](#step-5-role-based-access-control)
+- [Step 6. CMDB example](#step-6-cmdb-example)
+- [Step 7. Dashboard and reporting](#step-7-dashboard-and-reporting)
+
 ## Step 0. Set up the developer instance
 
 Before any IT Service Management (ITSM) work, I needed a working instance to build in.
