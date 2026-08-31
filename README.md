@@ -46,7 +46,7 @@ Reading about it is not the same as using it. This project is me using it. I sta
 
 ## Current Status
 
-The instance is live and the first three areas are built. I fill in each section, mark it done, and add screenshots as I finish the work in the instance.
+The instance is live and the first four areas are built. I fill in each section, mark it done, and add screenshots as I finish the work in the instance.
 
 | Component | Status |
 |---|---|
@@ -56,7 +56,7 @@ The instance is live and the first three areas are built. I fill in each section
 | Service catalog item | Done |
 | Flow Designer workflow | Done |
 | Knowledge base articles | Done |
-| Role-Based Access Control (users, groups, roles) | Not started |
+| Role-Based Access Control (users, groups, roles) | Done |
 | CMDB example | Not started |
 | Dashboard and reporting | Not started |
 
@@ -114,9 +114,11 @@ The full account, including the block editor, the approval workflow, and the sho
 
 ### 4. Role-Based Access Control
 
-_To be documented. Goal: create users, put them in groups, assign roles, and show that access follows the role. A fulfiller can work tickets, a requester can only see their own._
+**Done.** I created two users, a fulfiller added to the Network group from the Step 3 flow with the itil role, and a requester left as an ordinary user with no group and no elevated role. Impersonating each in turn showed the actual difference: the requester's incident list showed only the one ticket they'd opened, while the fulfiller's list showed that same ticket even though he wasn't the caller, itil's broader read access at work. I assigned it to the fulfiller, worked it to In Progress, and resolved it, tying the Network group back to the same one used for Step 3's approval routing rather than a throwaway example.
 
-<!-- screenshot added when this step is built: ![Groups and roles](images/rbac-groups.png) -->
+Adding the itil role pulled in 46 roles total, itil bundles a large contained set by design. I also hit a real ServiceNow quirk: a second group kept reappearing on the fulfiller's record no matter how many times I removed it by hand, which turned out to be role-based automatic group membership rather than anything I'd set directly. Full account in [WALKTHROUGH.md](WALKTHROUGH.md#step-5-role-based-access-control).
+
+![Alex Rivera's incident list showing Jordan Lee's ticket](images/rbac-alex-incident-list-broader-access.png)
 
 ### 5. CMDB example
 

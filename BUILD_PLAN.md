@@ -1,6 +1,6 @@
 # ServiceNow Build Plan
 
-_Last updated: August 19, 2026_
+_Last updated: August 31, 2026_
 
 The working plan for this project. The README is the public-facing record. This file is how I run the build and track where I am.
 
@@ -90,7 +90,7 @@ For every step:
 | 2. Request management | Done | Jul 29 |
 | 3. Catalog item and flow | Done | Jul 29 |
 | 4. Knowledge base articles | Done | Aug 19 |
-| 5. RBAC | Not started | |
+| 5. RBAC | Done | Aug 31 |
 | 6. CMDB | Not started | |
 | 7. Dashboard and reporting | Not started | |
 | 8. Publish and tie back | Not started | |

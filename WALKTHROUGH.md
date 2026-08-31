@@ -42,6 +42,7 @@ I am building in a free ServiceNow Personal Developer Instance (PDI). Each step 
   - [KB02, the same process, no repeat of the bug](#kb02-the-same-process-no-repeat-of-the-bug)
   - [Linking KB02 to the incident](#linking-kb02-to-the-incident)
 - [Step 5. Role-Based Access Control](#step-5-role-based-access-control)
+  - [Proving access follows role](#proving-access-follows-role)
 - [Step 6. CMDB example](#step-6-cmdb-example)
 - [Step 7. Dashboard and reporting](#step-7-dashboard-and-reporting)
 
@@ -404,41 +405,23 @@ Drafted and ready to paste into the knowledge base:
 
 KB01 already ties to INC0010003 from Step 1. For this step I logged a second incident tied to KB02's SSH hardening procedure, a Linux server flagged by a vulnerability scan for having SSH password authentication enabled.
 
-New from the incident list dropped me on the same Self Service form as Step 1, Number, Caller, Watch list, Urgency, State, Short description, nothing else.
-
-![Self Service form again](images/inc0010012-self-service-form.png)
-
-I didn't submit it. Same fix as Step 1, switch the list to Default view and click New from there for the full form.
+New from the incident list dropped me on the same stripped-down Self Service form as Step 1, so I switched to Default view and clicked New from there for the full form, same fix as before.
 
 The Category dropdown on the full form doesn't have a Security option. The instance ships with six: Inquiry / Help, Software, Hardware, Network, Database, Password Reset.
 
 ![Category dropdown options](images/inc0010012-category-options.png)
 
-I picked Software. This is an OpenSSH server configuration issue, not a password reset request and not a network problem.
-
-For Impact and Urgency: one server affected, not a site or a team, so Impact went to 3 - Low. Nothing was down and no one was blocked, but it's an active security exposure, an attacker could get in with a guessed password, so Urgency went to 2 - Medium. Priority calculated to 4 - Low, same as INC0010003.
-
-![Impact, Urgency, and calculated Priority](images/inc0010012-impact-urgency-priority.png)
+I picked Software, this is an OpenSSH server configuration issue, not a password reset request and not a network problem. For Impact and Urgency: one server affected, not a site or a team, so Impact went to 3 - Low. Nothing was down and no one was blocked, but it's an active security exposure, an attacker could get in with a guessed password, so Urgency went to 2 - Medium. Priority calculated to 4 - Low, same as INC0010003.
 
 ### Finding an assignment group
 
-The instance has 44 groups. I searched "Security" first, hoping for a dedicated group.
-
-![Full groups list, first 20 of 44](images/inc0010012-assignment-group-list.png)
-
-The search box turned out to sort alphabetically from the term rather than filter by substring, so "Security" landed on Service Desk, Software, Team Development Code Reviewers, and the US Presidents groups, nothing with "Security" in the name.
+The instance has 44 groups. I searched "Security" first, hoping for a dedicated group. The search box turned out to sort alphabetically from the term rather than filter by substring, so "Security" landed on Service Desk, Software, Team Development Code Reviewers, and the US Presidents groups, nothing with "Security" in the name.
 
 ![Groups search jumping alphabetically from "security"](images/inc0010012-assignment-group-search.png)
 
-No dedicated Security group exists, but Software does, and it matches the Category I'd already set. I used that.
-
-![Assignment group set to Software](images/inc0010012-assignment-group-set.png)
-
-Description before submitting:
+No dedicated Security group exists, but Software does, and it matches the Category I'd already set. I used that, then added the description:
 
 > A vulnerability scan of the Linux application server found OpenSSH configured with PasswordAuthentication enabled. Password login is exposed to brute-force attempts. Needs to be moved to key-based authentication with password login disabled.
-
-![Description added, ready to submit](images/inc0010012-description.png)
 
 Submitting created INC0010012, State New, Priority 4 - Low, Category Software, Assignment group Software. The list also shows a stray leftover record, "NO!! I will not DO things for you.", that neither of us created, unrelated instance clutter from earlier testing.
 
@@ -446,11 +429,7 @@ Submitting created INC0010012, State New, Priority 4 - Low, Category Software, A
 
 ### Assigning and working the incident
 
-Same qualifier as Step 1's Network group: Assigned to filters to members of the assignment group, not to a role. The Software group has five members, Beth Anglin, David Loo, Don Goodliffe, Fred Luddy, and ITIL User.
-
-![Software group members](images/inc0010012-assignment-group-members.png)
-
-I assigned it to ITIL User, the same demo account used for INC0010003, so the walkthrough stays consistent. State went to In Progress with a work note:
+Same qualifier as Step 1's Network group: Assigned to filters to members of the assignment group, not to a role. The Software group has five members, Beth Anglin, David Loo, Don Goodliffe, Fred Luddy, and ITIL User. I assigned it to ITIL User, the same demo account used for INC0010003, so the walkthrough stays consistent. State went to In Progress with a work note:
 
 > Confirmed sshd_config on the flagged host has PasswordAuthentication yes. Following the SSH key-based authentication KB procedure to generate a key, install it, verify key login, then disable password authentication.
 
@@ -460,45 +439,25 @@ INC0010012 stays at In Progress here. Linking the KB02 article comes next, and i
 
 ### Finding the knowledge base module
 
-Searching "knowledge" in the All menu turned up several unrelated matches, an Authentication Factors module also named Knowledge Based Factor, a Self-Service knowledge article view, and a System Mobile "Knowledge Bases" entry that turned out to be part of the mobile app configuration, not article management.
-
-![First search, mostly wrong modules](images/kb-search-wrong-modules.png)
-
-Narrowing to "knowledge base" surfaced the real one: Knowledge > Administration > Knowledge Bases.
+Searching "knowledge" in the All menu turned up several unrelated matches, an Authentication Factors module also named Knowledge Based Factor, a Self-Service knowledge article view, and a System Mobile "Knowledge Bases" entry that turned out to be part of the mobile app configuration, not article management. Narrowing to "knowledge base" surfaced the real one: Knowledge > Administration > Knowledge Bases.
 
 ![Second search finds the right module](images/kb-search-knowledge-bases-found.png)
 
-That opened a list of four knowledge bases the instance ships with, KCS Knowledge Base (demo data), Known Error, Knowledge, and IT, "The ACME North America IT Service Desk Knowledge Base." IT is the one both drafts specify.
-
-![Administration - Knowledge Bases list](images/kb-admin-knowledge-bases-list.png)
+That opened a list of four knowledge bases the instance ships with, KCS Knowledge Base (demo data), Known Error, Knowledge, and IT, "The ACME North America IT Service Desk Knowledge Base." IT is the one both drafts specify. Its publish workflow is "Knowledge - Approval Publish," meaning new articles need approval before going live, and it already had 42 articles and 8 categories.
 
 ### Adding the two categories
-
-The IT knowledge base record showed its publish workflow is "Knowledge - Approval Publish," meaning new articles need approval before going live, and it already had 42 articles and 8 categories.
-
-![IT knowledge base record](images/kb-it-knowledge-base-record.png)
 
 The 8 existing categories, News, Applications, Devices, IT, Email, Suppliers, Operating Systems, Service Design Package, don't include what either draft specifies. KB01 wants "Network and Remote Access," KB02 wants "Security and Hardening." Category editing wasn't disabled on this knowledge base, so I added both rather than force the articles into a category that didn't fit.
 
 ![The original 8 categories](images/kb-original-8-categories.png)
 
-First attempt at the label came out "Network Remote Access," missing "and." Caught it before saving and fixed it to match the draft exactly.
-
-![Category label typo, caught before saving](images/kb-category-label-typo.png)
-
-Both categories in, 10 total.
+First attempt at the label came out "Network Remote Access," missing "and." Caught it before saving and fixed it to match the draft exactly. Both categories in, 10 total.
 
 ![10 categories, both new ones added](images/kb-categories-10-final.png)
 
 ### Writing KB01 in the block editor
 
-New from the Knowledge (42) list assigned KB0010001, defaulted Knowledge base to IT, no Article type field on this create layout despite the draft listing one, the instance just doesn't expose it there.
-
-![Blank create form](images/kb01-create-form-blank.png)
-
-Short description and Category set to match the draft.
-
-![Short description and Category set](images/kb01-fields-set.png)
+New from the Knowledge (42) list assigned KB0010001, defaulted Knowledge base to IT, no Article type field on this create layout despite the draft listing one, the instance just doesn't expose it there. Short description and Category set to match the draft.
 
 The content area is a block-based page builder, not a text field, clicking into blank canvas does nothing. I initially assumed it needed a Text Section component dragged in first, but the real fix was the `</>` Edit code icon in the toolbar, which opens a raw HTML editor.
 
@@ -510,13 +469,7 @@ I converted the full KB01 markdown to HTML by hand and pasted it in wholesale ra
 
 ### Publish, approve, and a copy-paste bug
 
-Publish didn't go live directly, it routed to the KB's approval workflow, "Knowledge - Approval Publish," waiting on Bernard Laboy, the IT knowledge base's owner.
-
-![Approval requested, waiting on Bernard Laboy](images/kb01-approval-requested.png)
-
-As admin I approved it directly rather than impersonating Bernard Laboy.
-
-![Approved, KB0010001 v1.0](images/kb01-approved-v1.png)
+Publish didn't go live directly, it routed to the KB's approval workflow, "Knowledge - Approval Publish," waiting on Bernard Laboy, the IT knowledge base's owner. As admin I approved it directly rather than impersonating Bernard Laboy.
 
 I copy-pasted my own instruction text into the Short description field instead of just the article title, so the field read `Linux client cannot reach hosts behind a Tailscale subnet router" (matches the KB01 draft exactly)`, a stray quote and my parenthetical both included. It was visible right on the public article page.
 
@@ -530,13 +483,7 @@ Approving v1.02 promoted it to v2.0 Published and superseded v1.0 as the live ve
 
 ### KB02, the same process, no repeat of the bug
 
-KB0010002, Category Security and Hardening, HTML pasted the same way as KB01, 582 words.
-
-![KB0010002 create form](images/kb02-create-form.png)
-
-Same approval cycle, approved cleanly to v1.0 with no short description bug this time.
-
-![KB0010002 approved, v1.0](images/kb02-approved-v1.png)
+KB0010002, Category Security and Hardening, HTML pasted the same way as KB01, 582 words. Same approval cycle, approved cleanly to v1.0 with no short description bug this time.
 
 ### Linking KB02 to the incident
 
@@ -548,13 +495,7 @@ Narrowing the filter dropdown to "Knowledge Articles" surfaced KB0010002 directl
 
 ![Knowledge Articles filter finds KB0010002](images/inc-related-search-knowledge-found.png)
 
-Clicking Attach dropped raw markup into the Additional comments field instead of a rendered link, `[code]<a title="..." href='kb_view.do?...'>...</a>[/code]`, literal brackets and all. I assumed this was a Self Service view limitation, since that view had caused problems twice already in Step 1 and Step 2.
-
-![Raw markup in Self Service view](images/inc-attach-raw-markup-selfservice.png)
-
-Switching to Default view and repeating the search and Attach produced the identical raw text, so the Self Service theory was wrong.
-
-![Default view, same Attach action available](images/inc-attach-default-view.png)
+Clicking Attach dropped raw markup into the Additional comments field instead of a rendered link, `[code]<a title="..." href='kb_view.do?...'>...</a>[/code]`, literal brackets and all. I assumed this was a Self Service view limitation, since that view had caused problems twice already in Step 1 and Step 2. Switching to Default view and repeating the search and Attach produced the identical raw text, so the Self Service theory was wrong.
 
 ![Same raw markup shows up in Default view too](images/inc-attach-raw-markup-defaultview.png)
 
@@ -568,7 +509,39 @@ Both articles are published in the IT knowledge base now, KB0010001 categorized 
 
 ## Step 5. Role-Based Access Control
 
-_Not built yet. Goal: create users, put them in groups, assign roles, and show that access follows the role._
+Goal: create users, put them in groups, assign roles, and show that access follows the role, a fulfiller can work tickets, a requester sees only their own.
+
+I created two users. Alex Rivera is the fulfiller, added to the Network group from Step 3's approval routing and given the itil role. Jordan Lee is the requester, left with no group and no elevated role, an ordinary end user.
+
+Adding the itil role to Alex cascaded into 46 roles total, sn_incident_write, sn_change_write, and dozens more. That's expected, itil bundles a large set of contained roles by design, not a mistake on my part.
+
+![Alex Rivera's roles after the itil cascade](images/rbac-alex-roles-itil-bundle.png)
+
+The group side had a real wrong turn. I only added Alex to Network, but his Groups list came back showing Network and a second group I never touched, Conditional Script Writer. I removed it twice, through the row delete and through the multi-select editor, and it came back both times. ServiceNow groups have two paths into membership, one you set by hand and one computed automatically for anyone holding a matching role on the group's Roles field. Since itil's bundle is large, it's likely satisfying whatever role Conditional Script Writer requires, which would explain why manually removing the row does nothing, the membership isn't stored, it's recalculated. I didn't chase down which specific role in the bundle triggers it. Deleting and recreating Alex would not have fixed this either, since it's tied to the itil role itself, not the user record, so I left it as a known cosmetic quirk instead of a solved problem.
+
+![Alex Rivera's groups: Network as intended, Conditional Script Writer showing up on its own](images/rbac-alex-groups-conditional-script-writer.png)
+
+### Proving access follows role
+
+I impersonated Jordan Lee and submitted a new incident through the Service Catalog's "Create Incident" request, a more realistic requester path than the direct incident form I used in Steps 1 and 4. First pass at Urgency was 1 - High, which I walked back to 2 - Medium to stay consistent with how I'd rated a single fully-blocked user everywhere else in this project, INC0010003 and INC0010012 both got Medium for the same kind of single-user impact.
+
+INC0010013 came in as expected, Impact 3 - Low, Urgency 2 - Medium, Priority 4 - Low, Caller Jordan Lee.
+
+![INC0010013 submitted as Jordan Lee](images/rbac-jordan-incident-submitted.png)
+
+Jordan's own incident list showed exactly one row, INC0010013. Nothing else in the system was visible to them, not INC0010003, not INC0010012, nothing.
+
+![Jordan Lee's incident list: only their own ticket](images/rbac-jordan-incident-list-restricted.png)
+
+I stopped impersonating Jordan and impersonated Alex Rivera instead. His incident list showed INC0010013 immediately, a ticket he didn't open and isn't the caller on, which is the itil role's broader read access at work rather than the caller-scoped view Jordan gets.
+
+![Alex Rivera's incident list: sees Jordan's ticket too](images/rbac-alex-incident-list-broader-access.png)
+
+I set Assignment group to Network and Assigned to to Alex Rivera, tying this back to Step 3's group rather than a throwaway assignment, then worked it the same way as INC0010003, State to In Progress with a work note, then Resolved with a resolution code and notes.
+
+![INC0010013 resolved by Alex Rivera, assignment group Network](images/rbac-incident-resolved-final.png)
+
+That's the RBAC demonstration complete, a fulfiller with itil and group membership can see and work tickets beyond their own, a plain requester sees only what they opened.
 
 ## Step 6. CMDB example
 
