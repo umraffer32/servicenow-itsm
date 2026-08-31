@@ -1,6 +1,6 @@
 # Build Walkthrough
 
-_Last updated: August 19, 2026_
+_Last updated: August 31, 2026_
 
 This is the actual worklog. The [README](README.md) says what the project is and the [build plan](BUILD_PLAN.md) lays out the steps. This file is where I record what I actually did, in order, with screenshots, so the whole thing is reproducible from scratch.
 
@@ -154,7 +154,7 @@ I only confirmed that in Step 2, where the same field came back completely empty
 
 So System Administrator wasn't rejected for lacking a role. It just isn't in the Network group.
 
-I assigned the incident to ITIL User, the clearest of the five for a portfolio piece since it reads as an obvious demo account rather than a real name. Once RBAC is built in Step 5 with actual named users, I can come back and reassign this ticket to one of those instead.
+I assigned the incident to ITIL User, the clearest of the five for a portfolio piece since it reads as an obvious demo account rather than a real name. I'd planned to come back and reassign this to a named user once RBAC was built in Step 5, but by then INC0010003 was Closed and locked, so it stays assigned to ITIL User.
 
 With Assigned to set, I moved State to In Progress and logged a work note with the real diagnosis:
 
@@ -423,7 +423,7 @@ No dedicated Security group exists, but Software does, and it matches the Catego
 
 > A vulnerability scan of the Linux application server found OpenSSH configured with PasswordAuthentication enabled. Password login is exposed to brute-force attempts. Needs to be moved to key-based authentication with password login disabled.
 
-Submitting created INC0010012, State New, Priority 4 - Low, Category Software, Assignment group Software. The list also shows a stray leftover record, "NO!! I will not DO things for you.", that neither of us created, unrelated instance clutter from earlier testing.
+Submitting created INC0010012, State New, Priority 4 - Low, Category Software, Assignment group Software. The list also shows a stray leftover record, "NO!! I will not DO things for you.", that I didn't create, unrelated instance clutter from earlier testing.
 
 ![INC0010012 submitted](images/inc0010012-submitted-list.png)
 
@@ -517,13 +517,13 @@ Adding the itil role to Alex cascaded into 46 roles total, sn_incident_write, sn
 
 ![Alex Rivera's roles after the itil cascade](images/rbac-alex-roles-itil-bundle.png)
 
-The group side had a real wrong turn. I only added Alex to Network, but his Groups list came back showing Network and a second group I never touched, Conditional Script Writer. I removed it twice, through the row delete and through the multi-select editor, and it came back both times. ServiceNow groups have two paths into membership, one you set by hand and one computed automatically for anyone holding a matching role on the group's Roles field. Since itil's bundle is large, it's likely satisfying whatever role Conditional Script Writer requires, which would explain why manually removing the row does nothing, the membership isn't stored, it's recalculated. I didn't chase down which specific role in the bundle triggers it. Deleting and recreating Alex would not have fixed this either, since it's tied to the itil role itself, not the user record, so I left it as a known cosmetic quirk instead of a solved problem.
+The group side had a real wrong turn. I only added Alex to Network, but his Groups list came back showing Network and a second group I never touched, Conditional Script Writer. I removed it twice, through the row delete and through the multi-select editor, and it came back both times. ServiceNow groups have two paths into membership, one you set by hand and one computed automatically for anyone holding a matching role on the group's Roles field. Since itil's bundle is large, it's likely satisfying whatever role Conditional Script Writer requires, which would explain why manually removing the row does nothing, the membership isn't stored, it's recalculated. I didn't chase down which specific role in the bundle triggers it. Deleting and recreating Alex probably wouldn't have fixed it either, if the cause really is role-based, it's tied to the itil role itself, not the user record, so I left it as a known cosmetic quirk instead of a solved problem.
 
 ![Alex Rivera's groups: Network as intended, Conditional Script Writer showing up on its own](images/rbac-alex-groups-conditional-script-writer.png)
 
 ### Proving access follows role
 
-I impersonated Jordan Lee and submitted a new incident through the Service Catalog's "Create Incident" request, a more realistic requester path than the direct incident form I used in Steps 1 and 4. First pass at Urgency was 1 - High, which I walked back to 2 - Medium to stay consistent with how I'd rated a single fully-blocked user everywhere else in this project, INC0010003 and INC0010012 both got Medium for the same kind of single-user impact.
+I impersonated Jordan Lee and submitted a new incident through the Service Catalog's "Create Incident" request, a more realistic requester path than the direct incident form I used in Steps 1 and 4. First pass at Urgency was 1 - High, which I walked back to 2 - Medium to stay consistent with the rest of the project. Nothing rated here has gone to High: INC0010003 was one user blocked from their work, INC0010012 was one server with an active security exposure but nothing actually down, and this is one user locked out. All single-user scope, so all Medium at most.
 
 INC0010013 came in as expected, Impact 3 - Low, Urgency 2 - Medium, Priority 4 - Low, Caller Jordan Lee.
 

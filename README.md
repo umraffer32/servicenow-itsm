@@ -116,7 +116,7 @@ The full account, including the block editor, the approval workflow, and the sho
 
 **Done.** I created two users, a fulfiller added to the Network group from the Step 3 flow with the itil role, and a requester left as an ordinary user with no group and no elevated role. Impersonating each in turn showed the actual difference: the requester's incident list showed only the one ticket they'd opened, while the fulfiller's list showed that same ticket even though he wasn't the caller, itil's broader read access at work. I assigned it to the fulfiller, worked it to In Progress, and resolved it, tying the Network group back to the same one used for Step 3's approval routing rather than a throwaway example.
 
-Adding the itil role pulled in 46 roles total, itil bundles a large contained set by design. I also hit a real ServiceNow quirk: a second group kept reappearing on the fulfiller's record no matter how many times I removed it by hand, which turned out to be role-based automatic group membership rather than anything I'd set directly. Full account in [WALKTHROUGH.md](WALKTHROUGH.md#step-5-role-based-access-control).
+Adding the itil role pulled in 46 roles total, itil bundles a large contained set by design. I also hit a real ServiceNow quirk: a second group kept reappearing on the fulfiller's record no matter how many times I removed it by hand, most likely role-based automatic group membership rather than anything I'd set directly, though I didn't track down the exact role responsible. Full account in [WALKTHROUGH.md](WALKTHROUGH.md#step-5-role-based-access-control).
 
 ![Alex Rivera's incident list showing Jordan Lee's ticket](images/rbac-alex-incident-list-broader-access.png)
 
