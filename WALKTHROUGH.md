@@ -276,7 +276,7 @@ Rather than guess a second time, I opened the group itself. Field Services had t
 
 That's the real rule. The qualifier filters to group members, so an empty group produces an empty list whether or not a group is set. Hardware worked because ITIL User happened to belong to it. My first explanation was right about the mechanism and wrong about which condition had failed.
 
-I added ITIL User to Field Services through the Edit picker on Group Members. The save queues a background job to propagate the group's roles to the user, so the related list still read empty until I reloaded the record.
+I added ITIL User to Field Services through the Edit picker on Group Members. The related list still read empty until I reloaded the record.
 
 ![ITIL User added to Field Services](images/request-field-services-member-added.png)
 
@@ -411,7 +411,7 @@ The Category dropdown on the full form doesn't have a Security option. The insta
 
 ![Category dropdown options](images/inc0010012-category-options.png)
 
-I picked Software, this is an OpenSSH server configuration issue, not a password reset request and not a network problem. For Impact and Urgency: one server affected, not a site or a team, so Impact went to 3 - Low. Nothing was down and no one was blocked, but it's an active security exposure, an attacker could get in with a guessed password, so Urgency went to 2 - Medium. Priority calculated to 4 - Low, same as INC0010003.
+I picked Software, this is an OpenSSH server configuration issue, not a password reset request and not a network problem. For Impact and Urgency, one server affected, not a site or a team, so Impact went to 3 - Low. Nothing was down and no one was blocked, but it's an active security exposure, an attacker could get in with a guessed password, so Urgency went to 2 - Medium. Priority calculated to 4 - Low, same as INC0010003.
 
 ### Finding an assignment group
 
@@ -423,13 +423,13 @@ No dedicated Security group exists, but Software does, and it matches the Catego
 
 > A vulnerability scan of the Linux application server found OpenSSH configured with PasswordAuthentication enabled. Password login is exposed to brute-force attempts. Needs to be moved to key-based authentication with password login disabled.
 
-Submitting created INC0010012, State New, Priority 4 - Low, Category Software, Assignment group Software. The list also shows a stray leftover record, "NO!! I will not DO things for you.", that I didn't create, unrelated instance clutter from earlier testing.
+Submitting created INC0010012, State New, Priority 4 - Low, Category Software, Assignment group Software. The list also shows a stray leftover record, "NO!! I will not DO things for you.", that I didn't create.
 
 ![INC0010012 submitted](images/inc0010012-submitted-list.png)
 
 ### Assigning and working the incident
 
-Same qualifier as Step 1's Network group: Assigned to filters to members of the assignment group, not to a role. The Software group has five members, Beth Anglin, David Loo, Don Goodliffe, Fred Luddy, and ITIL User. I assigned it to ITIL User, the same demo account used for INC0010003, so the walkthrough stays consistent. State went to In Progress with a work note:
+Same qualifier as Step 1's Network group. Assigned to filters to members of the assignment group, not to a role. The Software group has five members, Beth Anglin, David Loo, Don Goodliffe, Fred Luddy, and ITIL User. I assigned it to ITIL User, the same demo account used for INC0010003, so the walkthrough stays consistent. State went to In Progress with a work note:
 
 > Confirmed sshd_config on the flagged host has PasswordAuthentication yes. Following the SSH key-based authentication KB procedure to generate a key, install it, verify key login, then disable password authentication.
 
@@ -439,7 +439,7 @@ INC0010012 stays at In Progress here. Linking the KB02 article comes next, and i
 
 ### Finding the knowledge base module
 
-Searching "knowledge" in the All menu turned up several unrelated matches, an Authentication Factors module also named Knowledge Based Factor, a Self-Service knowledge article view, and a System Mobile "Knowledge Bases" entry that turned out to be part of the mobile app configuration, not article management. Narrowing to "knowledge base" surfaced the real one: Knowledge > Administration > Knowledge Bases.
+Searching "knowledge" in the All menu turned up several unrelated matches, an Authentication Factors module also named Knowledge Based Factor, a Self-Service knowledge article view, and a System Mobile "Knowledge Bases" entry that turned out to be part of the mobile app configuration, not article management. Narrowing to "knowledge base" surfaced the real one, Knowledge > Administration > Knowledge Bases.
 
 ![Second search finds the right module](images/kb-search-knowledge-bases-found.png)
 
@@ -533,7 +533,7 @@ Jordan's own incident list showed exactly one row, INC0010013. Nothing else in t
 
 ![Jordan Lee's incident list: only their own ticket](images/rbac-jordan-incident-list-restricted.png)
 
-I stopped impersonating Jordan and impersonated Alex Rivera instead. His incident list showed INC0010013 immediately, a ticket he didn't open and isn't the caller on, which is the itil role's broader read access at work rather than the caller-scoped view Jordan gets.
+I stopped impersonating Jordan and impersonated Alex Rivera instead. His incident list showed INC0010013 immediately, a ticket he didn't open and isn't the caller on, and I hadn't set an Assignment group yet at that point, which rules out group membership as the explanation and points at the itil role's broader read access instead.
 
 ![Alex Rivera's incident list: sees Jordan's ticket too](images/rbac-alex-incident-list-broader-access.png)
 
@@ -545,7 +545,21 @@ That's the RBAC demonstration complete, a fulfiller with itil and group membersh
 
 ## Step 6. CMDB example
 
-_Not built yet. Goal: add a few configuration items, give them a relationship or two, and attach one to the still-open incident from Step 4 so the ticket shows the affected asset._
+Goal: attach a configuration item to the still-open incident from Step 4 so the ticket shows the affected asset.
+
+Finding the right module took a few wrong turns. The global text search buried the CMDB modules under seventy results for other tables entirely. Typing "Configuration Items" into the app navigator's filter box returned nothing. Searching "cmdb" surfaced a long list, and the first thing I tried from it, CI Class Manager, turned out to be for defining CI classes and their reconciliation rules, not for browsing or creating individual records. CMDB Workspace was the actual tool, and even there the first attempt failed, leftover text sitting in the Intelligent search box from an earlier click choked the search and threw a generic error dialog. Clearing it and using "Use conditional search instead" got to a plain filterable list.
+
+Filtering that list to class Linux Server returned four existing configuration items already seeded in the instance, `lnux100`, `lnux101`, `PS LinuxApp01`, and `PS LinuxApp02`. The instance ships with roughly 2,800 CIs, so rather than inventing a new server that corresponds to nothing, I picked one of the two that already matched the incident's own wording, a Linux application server. `PS LinuxApp01` also came with real infrastructure relationships already attached, connected by network gear, contained by a set of PeopleSoft services, and depending on mass storage devices. That's the CMDB relationship requirement satisfied by data that was already true, rather than a pair of records I'd have had to make up a relationship for.
+
+![PS LinuxApp01, the existing seeded configuration item](images/cmdb-ci-pslinuxapp01-record.png)
+
+![PS LinuxApp01's infrastructure relationships](images/cmdb-ci-infrastructure-relationships.png)
+
+I set `PS LinuxApp01` as the Configuration item on INC0010012 and saved it. Then I resolved the incident. The first resolution code the form defaulted to, "Resolved by request," didn't fit, nobody requested this ticket be closed. The available codes were Duplicate, Known error, No resolution provided, Resolved by caller, Resolved by change, Resolved by problem, Resolved by request, Solution provided, Workaround provided, and User error. "Solution provided" was the honest one, since the actual fix is the procedure documented in KB0010002, not a change I made against a real server. I wrote that distinction into the work notes directly, the SSH hardening was never applied to any live system in this instance, only documented and linked. Then I closed it.
+
+![INC0010012 closed, Configuration item attached, resolution history visible](images/inc0010012-closed-with-ci.png)
+
+INC0010012 had been open since Step 4, waiting on this and on the KB link. Both are done now, and it's the second incident in this project, after INC0010003, to run the full lifecycle to Closed.
 
 ## Step 7. Dashboard and reporting
 

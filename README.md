@@ -21,7 +21,7 @@ A small but complete ITSM slice in one instance, covering the core help desk wor
 - **A service catalog item with a Flow Designer workflow.** A request the end user submits from the portal that kicks off an automated approval and fulfillment flow.
 - **Knowledge base articles.** Two articles that document a common fix and a standard procedure, the way a real knowledge base reduces repeat tickets.
 - **Role-Based Access Control (RBAC).** Users, groups, and roles set up so the right people see and do the right things, and nobody sees what they should not.
-- **A Configuration Management Database (CMDB) example.** A handful of configuration items (CIs) and relationships, linked to incidents so a ticket shows the asset it affects.
+- **A Configuration Management Database (CMDB) example.** An existing configuration item, complete with its seeded relationships, linked to an incident so the ticket shows the asset it affects.
 
 Each area maps to a real duty from the help desk specialist role I am targeting. See [How This Maps to the Role](#how-this-maps-to-the-role) below.
 
@@ -46,7 +46,7 @@ Reading about it is not the same as using it. This project is me using it. I sta
 
 ## Current Status
 
-The instance is live and the first four areas are built. I fill in each section, mark it done, and add screenshots as I finish the work in the instance.
+The instance is live and the first five areas are built. I fill in each section, mark it done, and add screenshots as I finish the work in the instance.
 
 | Component | Status |
 |---|---|
@@ -57,7 +57,7 @@ The instance is live and the first four areas are built. I fill in each section,
 | Flow Designer workflow | Done |
 | Knowledge base articles | Done |
 | Role-Based Access Control (users, groups, roles) | Done |
-| CMDB example | Not started |
+| CMDB example | Done |
 | Dashboard and reporting | Not started |
 
 ## The Build
@@ -96,7 +96,7 @@ The flow behind it runs on Flow Designer, not the legacy Workflow engine that dr
 
 ![The flow](images/flow-designer-four-steps.png)
 
-I drove it end to end in all three roles, as the requester, the approver, and the fulfiller. The interesting part is that it failed the first run. The task closed and the requested item stayed open, because the legacy workflow in Step 2 had closed its parent records automatically and I assumed a flow would too. It doesn't. Flow Designer only does what you write, so the closing step was missing. I added it, re-ran the whole thing on a fresh request, and watched the requested item close itself one second after the task did.
+I drove it end to end in all three roles, as the requester, the approver, and the fulfiller. The interesting part is that it failed the first run. The task closed and the requested item stayed open, because the legacy workflow in the walkthrough's Step 2 had closed its parent records automatically and I assumed a flow would too. It doesn't. Flow Designer only does what you write, so the closing step was missing. I added it, re-ran the whole thing on a fresh request, and watched the requested item close itself one second after the task did.
 
 The full account, including the wrong category I picked first and the one cosmetic gap I left unfixed, is in [WALKTHROUGH.md](WALKTHROUGH.md#step-3-service-catalog-item-with-a-flow-designer-workflow).
 
@@ -114,17 +114,21 @@ The full account, including the block editor, the approval workflow, and the sho
 
 ### 4. Role-Based Access Control
 
-**Done.** I created two users, a fulfiller added to the Network group from the Step 3 flow with the itil role, and a requester left as an ordinary user with no group and no elevated role. Impersonating each in turn showed the actual difference: the requester's incident list showed only the one ticket they'd opened, while the fulfiller's list showed that same ticket even though he wasn't the caller, itil's broader read access at work. I assigned it to the fulfiller, worked it to In Progress, and resolved it, tying the Network group back to the same one used for Step 3's approval routing rather than a throwaway example.
+**Done.** I created two users, a fulfiller added to the Network group from the walkthrough's Step 3 flow with the itil role, and a requester left as an ordinary user with no group and no elevated role. Impersonating each in turn showed the actual difference. The requester's incident list showed only the one ticket they'd opened, while the fulfiller's list showed that same ticket before I'd even set an Assignment group, which rules out group membership and points at itil's broader read access instead. I assigned it to the fulfiller, worked it to In Progress, and resolved it, tying the Network group back to the same one used for the walkthrough's Step 3 approval routing rather than a throwaway example.
 
-Adding the itil role pulled in 46 roles total, itil bundles a large contained set by design. I also hit a real ServiceNow quirk: a second group kept reappearing on the fulfiller's record no matter how many times I removed it by hand, most likely role-based automatic group membership rather than anything I'd set directly, though I didn't track down the exact role responsible. Full account in [WALKTHROUGH.md](WALKTHROUGH.md#step-5-role-based-access-control).
+Adding the itil role pulled in 46 roles total, itil bundles a large contained set by design. I also hit a real ServiceNow quirk. A second group kept reappearing on the fulfiller's record no matter how many times I removed it by hand, most likely role-based automatic group membership rather than anything I'd set directly, though I didn't track down the exact role responsible. Full account in [WALKTHROUGH.md](WALKTHROUGH.md#step-5-role-based-access-control).
 
 ![Alex Rivera's incident list showing Jordan Lee's ticket](images/rbac-alex-incident-list-broader-access.png)
 
 ### 5. CMDB example
 
-_To be documented. Goal: add a small set of configuration items, give them a relationship or two, and attach a CI to an incident so the ticket shows the affected asset._
+**Done.** The instance ships with roughly 2,800 configuration items already seeded in, so rather than inventing a server that corresponds to nothing, I found `PS LinuxApp01`, an existing Linux server CI whose name already matches INC0010012's own description of a Linux application server. It came with real infrastructure relationships attached, connected by network gear, contained by a set of PeopleSoft services, and depending on mass storage devices, which satisfied the relationship part of this step with data that was already true rather than a pair of records built to order.
 
-<!-- screenshot added when this step is built: ![CMDB configuration items](images/cmdb-ci.png) -->
+I set it as INC0010012's Configuration item and resolved the ticket with "Solution provided" as the resolution code, since the actual fix is the procedure in KB0010002, not a change applied to any live system in this instance. INC0010012 had been open since the walkthrough's Step 4 waiting on exactly this, and closing it makes it the second incident in the project, after INC0010003, to run its full lifecycle to Closed.
+
+![PS LinuxApp01's infrastructure relationships](images/cmdb-ci-infrastructure-relationships.png)
+
+The full account, including the wrong turns finding the right CMDB module, is in [WALKTHROUGH.md](WALKTHROUGH.md#step-6-cmdb-example).
 
 ### 6. Dashboard and reporting
 

@@ -91,6 +91,6 @@ For every step:
 | 3. Catalog item and flow | Done | Jul 29 |
 | 4. Knowledge base articles | Done | Aug 19 |
 | 5. RBAC | Done | Aug 31 |
-| 6. CMDB | Not started | |
+| 6. CMDB | Done | Aug 31 |
 | 7. Dashboard and reporting | Not started | |
 | 8. Publish and tie back | Not started | |
