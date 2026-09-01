@@ -1,10 +1,10 @@
 # Build Walkthrough
 
-_Last updated: August 31, 2026_
+_Last updated: September 1, 2026_
 
 This is the actual worklog. The [README](README.md) says what the project is and the [build plan](BUILD_PLAN.md) lays out the steps. This file is where I record what I actually did, in order, with screenshots, so the whole thing is reproducible from scratch.
 
-I am building in a free ServiceNow Personal Developer Instance (PDI). Each step below is the real work as it happened, including the parts that did not go smoothly.
+I built in a free ServiceNow Personal Developer Instance (PDI). Each step below is the real work as it happened, including the parts that did not go smoothly.
 
 ## Contents
 
@@ -563,4 +563,20 @@ INC0010012 had been open since Step 4, waiting on this and on the KB link. Both 
 
 ## Step 7. Dashboard and reporting
 
-_Not built yet. Goal: build a dashboard with the active incident and request queue and a breakdown by priority or category._
+Goal: build a dashboard with the active incident and request queue and a breakdown by priority.
+
+Finding the module was the hard part again, and this time three searches in a row went nowhere. "Reports" in the app navigator returned too many results to scan. "Create New," which is the stock module name under the Reports application, returned 14 Create New modules across 11 applications, none of them reporting, Now Experience Framework, Platform Analytics Administration, Incident, Problem, Change, Service Catalog Wizards, Knowledge, Process Mining, System LDAP, System Web Services, and Targeted Communications, with no Reports header anywhere in the list. Platform Analytics Administration contributed two of the 14 (Indicators and Breakdowns), Process Mining three (Projects, Templates, and Scheduled Jobs), and the other nine applications one each. The Workspaces menu had six workspaces and no reporting one. What worked was Platform Analytics, which opens straight onto a Dashboards page with a Create dashboard button. In hindsight the Create New search had come closer than it looked. Platform Analytics Administration was in that result list, so the search surfaced the right application family, just not any module that would create a dashboard.
+
+I named the dashboard "Incident and Request Queue" and picked the in-line editor over the technical editor, since this needs drag and drop, not scripting.
+
+The first element is a List pointed at the Incident table. Unfiltered it returned all 74 incidents in the instance including the closed ones, so I added the condition Active is true and it came down to 43. That's the same filter logic as the saved list from Step 1, rebuilt here as a dashboard widget.
+
+The second element defaulted to a Single score, which I changed to Pie. It auto-grouped by Active, which produced one solid circle, since every record in the filtered source is active by definition. Changing Group by to Priority gave the real breakdown across all five levels.
+
+The third element is another List, pointed at the Requested Item table with the same Active is true condition, six records. I nearly cut this one and renamed the dashboard to incidents only, but this build covers incidents and requests together, and the widget was the same five clicks I'd just done.
+
+One thing I didn't get working was the widget-level title. The Configuration panel has a Header and border section, but I couldn't find a title field inside it, and Configure on the widget itself only produced resize handles. The elements are untitled on the finished dashboard. Cosmetic, and I left it.
+
+![The finished dashboard, request queue on top, active incidents and priority breakdown below](images/dashboard-incident-request-queue.png)
+
+Two of this project's documented loose ends are visible in that request list. RITM0010002, the record the Step 3 flow left Open because the flow was missing its closing step, is the top row. Its Stage reads "Request Approved," the stale value from Step 3 that nothing writes to. Both are still there on purpose.

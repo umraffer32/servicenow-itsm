@@ -1,18 +1,18 @@
 # ServiceNow Build Plan
 
-_Last updated: August 31, 2026_
+_Last updated: September 1, 2026_
 
-The working plan for this project. The README is the public-facing record. This file is how I run the build and track where I am.
+The working plan for this project. The README is the public-facing summary and WALKTHROUGH.md is the full worklog. This file is how I run the build and track where I am.
 
 ## Goal
 
-Stand up a complete IT Service Management (ITSM) slice in a free ServiceNow Personal Developer Instance (PDI), document each piece in the README with screenshots, and publish the repository at github.com/umraffer32. This closes the one honest gap in my California state IT applications, since ServiceNow is weighted heavily in the help desk specialist duty statement (RPA 30622, JC-520758) and I had not used it hands-on before.
+Stand up a complete IT Service Management (ITSM) slice in a free ServiceNow Personal Developer Instance (PDI) and document each piece with screenshots, the full worklog in WALKTHROUGH.md and a summary per area in the README. ServiceNow is the system of record for IT support at most large organizations, and I hadn't used it hands-on before.
 
 The project does not have to be large. It has to be real, complete, and reproducible.
 
 ## Scope
 
-Five areas, each tied to a real duty from the role:
+Five areas, each a standard piece of help desk work:
 
 1. Incident and request management.
 2. A service catalog item with a Flow Designer workflow.
@@ -20,11 +20,11 @@ Five areas, each tied to a real duty from the role:
 4. Role-Based Access Control (RBAC): users, groups, roles.
 5. A small Configuration Management Database (CMDB) example.
 
-Plus a dashboard to read the incident and request queue, since the duty statement names ServiceNow Dashboards and Reports.
+Plus a dashboard to read the incident and request queue.
 
 ## Build order
 
-I build in the order a real ticket flows, so each piece has something to connect to. Each step is done in the browser inside the PDI, then written up in the matching README section with a screenshot before moving on.
+I build in the order a real ticket flows, so each piece has something to connect to. Each step is done in the browser inside the PDI, then written up in WALKTHROUGH.md and summarized in the matching README section with a screenshot before moving on.
 
 ### Step 0. Provision the instance
 - Sign up at developer.servicenow.com and request a Personal Developer Instance.
@@ -56,7 +56,7 @@ I build in the order a real ticket flows, so each piece has something to connect
 **Log a second incident first.** INC0010003 from Step 1 is Closed, and closing an incident locks most of its fields. Configuration item is one of the locked ones, so Step 6 can't use it either. Log a fresh incident at the start of Step 4 and work it only as far as In Progress. Step 4 links the article to it and Step 6 attaches the configuration item to it. Do not resolve or close it until both steps are done, then close it last as the finale.
 
 ### Step 5. Role-Based Access Control
-- Create a few users. Create groups (for example Service Desk and an approver group). Assign roles.
+- Create a few users. Use existing groups rather than creating new ones. Assign roles.
 - Show that access follows the role: a fulfiller can work tickets, a requester sees only their own.
 - Reuse the groups from Step 3's approval routing so this is not a throwaway example.
 
@@ -65,21 +65,25 @@ I build in the order a real ticket flows, so each piece has something to connect
 - Create one or two relationships between them.
 - Attach a CI to the still-open incident logged in Step 4 so the ticket shows the affected asset, which supports root cause analysis. Not INC0010003, which is closed and locked.
 
+**No new CIs were added.** The instance ships with roughly 2,800 seeded configuration items, so inventing a handful of new ones would have meant inventing data. I reused `PS LinuxApp01`, an existing Linux server CI whose name already matched the incident's own description, along with the infrastructure relationships that came attached to it.
+
 ### Step 7. Dashboard and reporting
 - Build a simple dashboard with the active incident and request queue and a breakdown by priority or category.
-- This is the ServiceNow Dashboards and Reports duty.
+- This is the reporting side of reading a service desk queue.
 
-### Step 8. Publish
-- Final pass on the README, confirm every section has steps and a screenshot.
-- Create the public repository at github.com/umraffer32 and push.
+### Step 8. Final pass
+- Consistency pass across the README, this plan, and WALKTHROUGH.md. The repository already lives at github.com/umraffer32/servicenow-itsm with the full history pushed.
+- Confirm every section has steps and a screenshot.
+- The README status badge now reads Complete.
 
 ## How each piece gets documented
 
 For every step:
 1. Do the work in the PDI.
 2. Take a clean screenshot and save it to `images/` with a descriptive name.
-3. Fill in the matching README section: what I did, why, the steps to reproduce, and the screenshot.
-4. Update the Current Status table in the README from Not started to Done.
+3. Write the full worklog section in WALKTHROUGH.md: what I did, why, the wrong turns, and the screenshots.
+4. Summarize it in the matching README section with one screenshot.
+5. Update the Current Status table in the README and the Progress table here.
 
 ## Progress
 
@@ -92,5 +96,5 @@ For every step:
 | 4. Knowledge base articles | Done | Aug 19 |
 | 5. RBAC | Done | Aug 31 |
 | 6. CMDB | Done | Aug 31 |
-| 7. Dashboard and reporting | Not started | |
-| 8. Publish and tie back | Not started | |
+| 7. Dashboard and reporting | Done | Sep 1 |
+| 8. Final pass | Done | Sep 1 |

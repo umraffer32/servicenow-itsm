@@ -3,13 +3,13 @@
 ![ServiceNow](https://img.shields.io/badge/ServiceNow-Personal_Developer_Instance-62D84E?logo=servicenow&logoColor=white&style=flat-square)
 ![Framework](https://img.shields.io/badge/Framework-ITIL_4-005571?style=flat-square)
 ![Scope](https://img.shields.io/badge/Scope-Incident_·_Request_·_Knowledge_·_RBAC_·_CMDB-2E7D32?style=flat-square)
-![Status](https://img.shields.io/badge/Status-Building-orange?style=flat-square)
+![Status](https://img.shields.io/badge/Status-Complete-2E7D32?style=flat-square)
 
-A hands-on IT Service Management (ITSM) build in a free ServiceNow Personal Developer Instance (PDI). I work the platform the way a help desk specialist does and document each piece here so the work is reproducible and easy to verify.
+A hands-on IT Service Management (ITSM) build in a free ServiceNow Personal Developer Instance (PDI). I worked the platform the way a service desk agent does and documented each piece here so the work is reproducible and easy to verify.
 
-I built this to close one real gap. My background is infrastructure, automation, and security, and ServiceNow is the one tool the California state IT roles I am applying to weight heavily that I had not used hands-on yet. So I am using it for real, end to end, and writing down exactly what I did.
+My background is infrastructure, automation, and security, and I hadn't used ServiceNow hands-on before this. So I used it for real, end to end, and wrote down exactly what I did.
 
-The actual work happens in the browser inside the PDI. This repository is the record of that work, with screenshots and step-by-step notes for every piece.
+The actual work happened in the browser inside the PDI. This repository is the record of that work, with screenshots and step-by-step notes for every piece.
 
 ![Overview diagram](images/overview.svg)
 
@@ -23,11 +23,11 @@ A small but complete ITSM slice in one instance, covering the core help desk wor
 - **Role-Based Access Control (RBAC).** Users, groups, and roles set up so the right people see and do the right things, and nobody sees what they should not.
 - **A Configuration Management Database (CMDB) example.** An existing configuration item, complete with its seeded relationships, linked to an incident so the ticket shows the asset it affects.
 
-Each area maps to a real duty from the help desk specialist role I am targeting. See [How This Maps to the Role](#how-this-maps-to-the-role) below.
+Each area maps to a standard piece of IT service desk work. See [How This Maps to Help Desk Work](#how-this-maps-to-help-desk-work) below.
 
 ## Platform
 
-| Layer | What I use |
+| Layer | What I used |
 |---|---|
 | Instance | ServiceNow Personal Developer Instance (free, full platform) |
 | Framework | ITIL 4 service management practices |
@@ -40,13 +40,11 @@ Each area maps to a real duty from the help desk specialist role I am targeting.
 
 ## Why It Exists
 
-ServiceNow is the system of record for IT support at most large organizations, including the California state departments I am applying to. The duty statement for the role I am targeting names ServiceNow directly for incident and request handling, the service portal, the knowledge base, and dashboards and reporting.
-
-Reading about it is not the same as using it. This project is me using it. I stand up each capability in a real instance, run a realistic ticket through it, and document the steps and the result. By the end the repository shows the full path a request takes, from a user submitting it to a resolved ticket tied to a knowledge article and a configuration item.
+ServiceNow is the system of record for IT support at most large organizations. Reading about it is not the same as using it, so this project is me using it. I stood up each capability in a real instance, ran a realistic ticket through it, and documented the steps and the result. The repository shows the full path a request takes, from a user submitting it to a resolved ticket tied to a knowledge article and a configuration item.
 
 ## Current Status
 
-The instance is live and the first five areas are built. I fill in each section, mark it done, and add screenshots as I finish the work in the instance.
+The instance is live, every area is built, and every section below is written up with screenshots from the instance.
 
 | Component | Status |
 |---|---|
@@ -58,11 +56,11 @@ The instance is live and the first five areas are built. I fill in each section,
 | Knowledge base articles | Done |
 | Role-Based Access Control (users, groups, roles) | Done |
 | CMDB example | Done |
-| Dashboard and reporting | Not started |
+| Dashboard and reporting | Done |
 
 ## The Build
 
-Each section below gets filled in as I complete it: what I did, why, the steps to reproduce it, and a screenshot.
+Each section below covers what I did, why, the steps to reproduce it, and a screenshot.
 
 ### 1. Incident and request management
 
@@ -132,18 +130,20 @@ The full account, including the wrong turns finding the right CMDB module, is in
 
 ### 6. Dashboard and reporting
 
-_To be documented. Goal: build a dashboard with the active incident and request queue and a breakdown by priority or category._
+**Done.** A Platform Analytics dashboard called "Incident and Request Queue" with three elements: a list of the 43 active incidents, a list of the 6 active requested items, and a pie chart breaking the incident queue down across all five priority levels. Everything is filtered on Active is true, the same logic as the saved list from the incident management section, rebuilt here as dashboard widgets.
 
-<!-- screenshot added when this step is built: ![Incident and request dashboard](images/dashboard.png) -->
+![The finished dashboard](images/dashboard-incident-request-queue.png)
 
-## How This Maps to the Role
+The full account, including three failed attempts at finding the reporting module and one cosmetic thing I couldn't get working, is in [WALKTHROUGH.md](WALKTHROUGH.md#step-7-dashboard-and-reporting).
 
-This build is scoped against the published duty statement for an Information Technology Specialist I help desk role at the California Department of General Services, Enterprise Technology Solutions. The mapping:
+## How This Maps to Help Desk Work
 
-| Duty from the statement | Where it shows up here |
+This build is scoped against the responsibilities that come up in most IT service desk roles. The mapping:
+
+| Service desk work | Where it shows up here |
 |---|---|
-| Evaluate and assign incidents and requests, document them in ServiceNow Dashboards and Reports | Incident and request management, plus the dashboard |
-| Complete the IT Service Request through the ServiceNow Portal and meet the service level agreement (SLA) | Service catalog item with the Flow Designer workflow |
+| Evaluate and assign incidents and requests, document them in ServiceNow dashboards and reports | Incident and request management, plus the dashboard |
+| Fulfill service requests through the ServiceNow portal within service level agreements (SLAs) | Service catalog item with the Flow Designer workflow |
 | Research and create knowledge articles to document IT processes and common fixes in the ServiceNow knowledge base | Knowledge base articles |
 | Diagnose and resolve complex incidents, perform root cause analysis in ServiceNow | Incident management linked to CMDB configuration items |
 | Handle sensitive information and maintain confidentiality | Role-Based Access Control |
